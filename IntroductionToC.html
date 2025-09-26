@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Introduction to C</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Simple syntax highlighting for C code */
+        .code-keyword { color: #4F46E5; font-weight: 500; }
+        .code-comment { color: #16A34A; }
+        .code-string { color: #DB2777; }
+        .code-preprocessor { color: #9333EA; }
+        .code-number { color: #F59E0B; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
+
+        <!-- Header -->
+        <header class="mb-8">
+            <h1 class="text-4xl font-bold text-slate-900">Introduction to C</h1>
+            <p class="text-lg text-slate-600 mt-2">A foundational look into the C programming language.</p>
+        </header>
+
+        <!-- Main Content Sections -->
+        <div class="space-y-8">
+
+            <!-- History Section -->
+            <section id="history" class="bg-white p-6 rounded-lg shadow-sm transition hover:shadow-md">
+                <h2 class="text-2xl font-semibold text-indigo-700 border-b pb-2 mb-4">History of C</h2>
+                <div class="space-y-4 text-slate-700">
+                    <p>The C programming language was developed in the early 1970s by <strong class="font-medium">Dennis Ritchie</strong> at Bell Labs. It was created to be a system implementation language for the nascent Unix operating system.</p>
+                    <p>C is a procedural, general-purpose language that provides low-level access to memory and machine instructions, making it highly efficient. Its influence is widespread, with many later languages like C++, C#, Java, and Python borrowing concepts directly from it.</p>
+                </div>
+            </section>
+
+            <!-- Variables Section -->
+            <section id="variables" class="bg-white p-6 rounded-lg shadow-sm transition hover:shadow-md">
+                <h2 class="text-2xl font-semibold text-indigo-700 border-b pb-2 mb-4">Variables & Variable Names</h2>
+                <div class="space-y-4 text-slate-700">
+                    <p>In C, a <strong class="font-medium">variable</strong> is a name given to a storage area that our programs can manipulate. Each variable in C has a specific type, which determines the size and layout of the variable's memory.</p>
+                    <h3 class="text-lg font-medium text-slate-800">Rules for Naming Variables:</h3>
+                    <ul class="list-disc list-inside space-y-2 pl-4">
+                        <li>Variable names can contain letters (both uppercase and lowercase), digits, and the underscore character (_).</li>
+                        <li>The first character of a variable name must be a letter or an underscore. It cannot be a digit.</li>
+                        <li>There is no rule on how long a variable name can be. However, some compilers might have restrictions.</li>
+                        <li>Variable names are case-sensitive. For example, <code class="bg-slate-200 px-2 py-1 rounded">age</code> and <code class="bg-slate-200 px-2 py-1 rounded">Age</code> are two different variables.</li>
+                        <li>Keywords (like <code class="bg-slate-200 px-2 py-1 rounded">int</code>, <code class="bg-slate-200 px-2 py-1 rounded">while</code>, etc.) cannot be used as variable names.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Data Types and Sizes Section -->
+            <section id="datatypes" class="bg-white p-6 rounded-lg shadow-sm transition hover:shadow-md">
+                <h2 class="text-2xl font-semibold text-indigo-700 border-b pb-2 mb-4">Data Types and Sizes</h2>
+                <p class="mb-4 text-slate-700">C provides a set of built-in data types. The size of these types can vary between different compilers and computer architectures.</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100">
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Data Type</th>
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Typical Size (bytes)</th>
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Description</th>
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Format Specifier</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200"><code class="font-mono">int</code></td>
+                                <td class="p-3 border border-slate-200">4</td>
+                                <td class="p-3 border border-slate-200">Integer values</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">%d</code> or <code class="font-mono">%i</code></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200"><code class="font-mono">char</code></td>
+                                <td class="p-3 border border-slate-200">1</td>
+                                <td class="p-3 border border-slate-200">Single character</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">%c</code></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200"><code class="font-mono">float</code></td>
+                                <td class="p-3 border border-slate-200">4</td>
+                                <td class="p-3 border border-slate-200">Single-precision floating-point number</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">%f</code></td>
+                            </tr>
+                             <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200"><code class="font-mono">double</code></td>
+                                <td class="p-3 border border-slate-200">8</td>
+                                <td class="p-3 border border-slate-200">Double-precision floating-point number</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">%lf</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Constants and Declaration Section -->
+            <section id="declarations" class="bg-white p-6 rounded-lg shadow-sm transition hover:shadow-md">
+                <h2 class="text-2xl font-semibold text-indigo-700 border-b pb-2 mb-4">Declaration of Variables and Constants</h2>
+                <div class="space-y-4 text-slate-700">
+                    <p>A <strong class="font-medium">declaration</strong> specifies a name and a type for a variable or constant. You must declare all variables before they can be used.</p>
+
+                    <h3 class="text-lg font-medium text-slate-800">Declaring Variables</h3>
+                    <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code class="language-c"><span class="code-keyword">int</span> score;          <span class="code-comment">// Declares an integer variable named 'score'</span>
+<span class="code-keyword">float</span> temperature = <span class="code-number">98.6</span>; <span class="code-comment">// Declares and initializes a float</span>
+<span class="code-keyword">char</span> grade = <span class="code-string">'A'</span>;     <span class="code-comment">// Declares and initializes a character</span></code></pre>
+
+                    <h3 class="text-lg font-medium text-slate-800 mt-4">Defining Constants</h3>
+                    <p>Constants are fixed values that cannot be altered by the program. There are two primary ways to define them:</p>
+                    
+                    <h4 class="font-medium text-slate-800">1. Using the `const` keyword:</h4>
+                    <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code class="language-c"><span class="code-keyword">const double</span> PI = <span class="code-number">3.14159</span>;
+<span class="code-keyword">const int</span> MAX_USERS = <span class="code-number">100</span>;</code></pre>
+                    
+                    <h4 class="font-medium text-slate-800">2. Using `#define` preprocessor directive:</h4>
+                    <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code class="language-c"><span class="code-preprocessor">#define</span> PI <span class="code-number">3.14159</span>
+<span class="code-preprocessor">#define</span> MAX_USERS <span class="code-number">100</span></code></pre>
+                </div>
+            </section>
+            
+            <!-- Arithmetic Operations Section -->
+            <section id="arithmetic" class="bg-white p-6 rounded-lg shadow-sm transition hover:shadow-md">
+                <h2 class="text-2xl font-semibold text-indigo-700 border-b pb-2 mb-4">Arithmetic Operations</h2>
+                <p class="mb-4 text-slate-700">C supports the standard arithmetic operators. These operators follow a specific order of precedence, with multiplication, division, and modulo having higher precedence than addition and subtraction. You can use parentheses `()` to override the default precedence.</p>
+                 <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100">
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Operator</th>
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Meaning</th>
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono">+</td>
+                                <td class="p-3 border border-slate-200">Addition</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">a + b</code></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono">-</td>
+                                <td class="p-3 border border-slate-200">Subtraction</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">a - b</code></td>
+                            </tr>
+                             <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono">*</td>
+                                <td class="p-3 border border-slate-200">Multiplication</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">a * b</code></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono">/</td>
+                                <td class="p-3 border border-slate-200">Division</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">a / b</code></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono">%</td>
+                                <td class="p-3 border border-slate-200">Modulo (remainder of division)</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">a % b</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Relational Operations Section -->
+            <section id="relational" class="bg-white p-6 rounded-lg shadow-sm transition hover:shadow-md">
+                <h2 class="text-2xl font-semibold text-indigo-700 border-b pb-2 mb-4">Relational Operations</h2>
+                <p class="mb-4 text-slate-700">Relational operators are used to compare two values. The result of a relational operation is a boolean value: either true (represented by 1) or false (represented by 0).</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100">
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Operator</th>
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Meaning</th>
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono">==</td>
+                                <td class="p-3 border border-slate-200">Equal to</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">a == b</code></td>
+                            </tr>
+                             <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono">!=</td>
+                                <td class="p-3 border border-slate-200">Not equal to</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">a != b</code></td>
+                            </tr>
+                             <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono">></td>
+                                <td class="p-3 border border-slate-200">Greater than</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">a > b</code></td>
+                            </tr>
+                             <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono"><</td>
+                                <td class="p-3 border border-slate-200">Less than</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">a < b</code></td>
+                            </tr>
+                             <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono">>=</td>
+                                <td class="p-3 border border-slate-200">Greater than or equal to</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">a >= b</code></td>
+                            </tr>
+                             <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono"><=</td>
+                                <td class="p-3 border border-slate-200">Less than or equal to</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">a <= b</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Logical Operations Section -->
+            <section id="logical" class="bg-white p-6 rounded-lg shadow-sm transition hover:shadow-md">
+                <h2 class="text-2xl font-semibold text-indigo-700 border-b pb-2 mb-4">Logical Operations</h2>
+                <p class="mb-4 text-slate-700">Logical operators are used to combine or negate conditions. They are often used with relational operators to create complex expressions. C uses <strong class="font-medium">short-circuit evaluation</strong>. For `&&`, if the first operand is false, the second is not evaluated. For `||`, if the first operand is true, the second is not evaluated.</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100">
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Operator</th>
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Meaning</th>
+                                <th class="p-3 font-medium text-slate-700 border border-slate-200">Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono">&&</td>
+                                <td class="p-3 border border-slate-200">Logical AND. True if both operands are true.</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">(x > 5) && (y < 10)</code></td>
+                            </tr>
+                             <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono">||</td>
+                                <td class="p-3 border border-slate-200">Logical OR. True if at least one operand is true.</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">(a == 0) || (b == 0)</code></td>
+                            </tr>
+                             <tr class="hover:bg-slate-50">
+                                <td class="p-3 border border-slate-200 text-center font-mono">!</td>
+                                <td class="p-3 border border-slate-200">Logical NOT. Reverses the logical state of its operand.</td>
+                                <td class="p-3 border border-slate-200"><code class="font-mono">!(isFinished)</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Practical Problems Section -->
+            <section id="problems" class="bg-white p-6 rounded-lg shadow-sm transition hover:shadow-md">
+                <h2 class="text-2xl font-semibold text-indigo-700 border-b pb-2 mb-4">Practical Problems & Solutions</h2>
+                <div class="space-y-8">
+
+                    <!-- Problem 1 -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-800">Problem 1: Sum of Two Numbers</h3>
+                        <p class="mt-2 text-slate-700">Write a C program to ask the user for two integers, calculate their sum, and display the result.</p>
+                        
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Solution:</h4>
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code class="language-c"><span class="code-preprocessor">#include &lt;stdio.h&gt;</span>
+
+<span class="code-keyword">int</span> main() {
+    <span class="code-comment">// Declare variables to store the two numbers and their sum</span>
+    <span class="code-keyword">int</span> num1, num2, sum;
+
+    <span class="code-comment">// Prompt the user to enter the first number</span>
+    printf(<span class="code-string">"Enter first integer: "</span>);
+    scanf(<span class="code-string">"%d"</span>, &num1);
+
+    <span class="code-comment">// Prompt the user to enter the second number</span>
+    printf(<span class="code-string">"Enter second integer: "</span>);
+    scanf(<span class="code-string">"%d"</span>, &num2);
+
+    <span class="code-comment">// Calculate the sum</span>
+    sum = num1 + num2;
+
+    <span class="code-comment">// Print the result</span>
+    printf(<span class="code-string">"Sum: %d\n"</span>, sum);
+
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}
+</code></pre>
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Explanation:</h4>
+                        <p class="text-slate-700">The program uses `printf()` to display prompts to the user and `scanf()` to read the integer values entered by the user. The `&` symbol before `num1` and `num2` in `scanf()` is the "address-of" operator; it tells `scanf` where in memory to store the input. Finally, it calculates the sum and prints it to the console.</p>
+                    </div>
+
+                    <!-- Problem 2 -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-800">Problem 2: Area of a Circle</h3>
+                        <p class="mt-2 text-slate-700">Write a C program that calculates the area of a circle. Define PI as a constant, ask the user for the radius, and print the area.</p>
+                        
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Solution:</h4>
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code class="language-c"><span class="code-preprocessor">#include &lt;stdio.h&gt;</span>
+
+<span class="code-preprocessor">#define PI 3.14159</span>
+
+<span class="code-keyword">int</span> main() {
+    <span class="code-comment">// Declare variables for radius and area</span>
+    <span class="code-keyword">float</span> radius, area;
+
+    <span class="code-comment">// Prompt user for the radius</span>
+    printf(<span class="code-string">"Enter the radius of the circle: "</span>);
+    scanf(<span class="code-string">"%f"</span>, &radius);
+
+    <span class="code-comment">// Calculate the area using the formula: PI * r^2</span>
+    area = PI * radius * radius;
+
+    <span class="code-comment">// Display the result</span>
+    printf(<span class="code-string">"The area of the circle with radius %.2f is %.2f\n"</span>, radius, area);
+
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}
+</code></pre>
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Explanation:</h4>
+                        <p class="text-slate-700">Here, `PI` is defined as a constant using `#define`. The program takes a floating-point number (`float`) as input for the radius. The area is calculated and then printed using `printf()`. The `%.2f` format specifier is used to display the floating-point numbers with only two digits after the decimal point.</p>
+                    </div>
+
+                    <!-- Problem 3 -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-800">Problem 3: Swap Two Numbers</h3>
+                        <p class="mt-2 text-slate-700">Write a C program to swap the values of two integer variables using a third temporary variable.</p>
+                        
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Solution:</h4>
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code class="language-c"><span class="code-preprocessor">#include &lt;stdio.h&gt;</span>
+
+<span class="code-keyword">int</span> main() {
+    <span class="code-keyword">int</span> a = <span class="code-number">10</span>, b = <span class="code-number">20</span>;
+    <span class="code-keyword">int</span> temp;
+
+    printf(<span class="code-string">"Before swapping: a = %d, b = %d\n"</span>, a, b);
+
+    <span class="code-comment">// Swapping logic</span>
+    temp = a;   <span class="code-comment">// Store the value of 'a' in temp</span>
+    a = b;      <span class="code-comment">// Assign the value of 'b' to 'a'</span>
+    b = temp;   <span class="code-comment">// Assign the value stored in temp to 'b'</span>
+
+    printf(<span class="code-string">"After swapping: a = %d, b = %d\n"</span>, a, b);
+
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}
+</code></pre>
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Explanation:</h4>
+                        <p class="text-slate-700">This classic problem demonstrates variable manipulation. To swap the values of `a` and `b`, we need a third variable, `temp`, as a temporary placeholder. We first copy the value of `a` into `temp`. Now that `a`'s original value is safe, we can overwrite `a` with the value of `b`. Finally, we take the original value of `a` (which is stored in `temp`) and assign it to `b`, completing the swap.</p>
+                    </div>
+
+                    <!-- Problem 4 -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-800">Problem 4: Check if a Number is Even or Odd</h3>
+                        <p class="mt-2 text-slate-700">Write a C program that takes an integer from the user and checks whether the number is even or odd using the modulo operator.</p>
+                        
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Solution:</h4>
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code class="language-c"><span class="code-preprocessor">#include &lt;stdio.h&gt;</span>
+
+<span class="code-keyword">int</span> main() {
+    <span class="code-keyword">int</span> number;
+
+    printf(<span class="code-string">"Enter an integer: "</span>);
+    scanf(<span class="code-string">"%d"</span>, &number);
+
+    <span class="code-comment">// Check if the remainder when divided by 2 is 0</span>
+    <span class="code-keyword">if</span> (number % <span class="code-number">2</span> == <span class="code-number">0</span>) {
+        printf(<span class="code-string">"%d is an even number.\n"</span>, number);
+    } <span class="code-keyword">else</span> {
+        printf(<span class="code-string">"%d is an odd number.\n"</span>, number);
+    }
+
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}
+</code></pre>
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Explanation:</h4>
+                        <p class="text-slate-700">This program introduces basic conditional logic with an `if-else` statement. The core of the logic is the expression `number % 2`. The modulo operator (`%`) gives the remainder of a division. Any integer that is perfectly divisible by 2 is even, meaning the remainder is 0. If the condition `number % 2 == 0` is true, the `if` block is executed; otherwise, the `else` block is executed.</p>
+                    </div>
+                    
+                    <!-- Problem 5 -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-800">Problem 5: Convert Fahrenheit to Celsius</h3>
+                        <p class="mt-2 text-slate-700">Write a C program to convert a temperature from Fahrenheit to Celsius. The formula is C = (F - 32) * 5 / 9.</p>
+                        
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Solution:</h4>
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code class="language-c"><span class="code-preprocessor">#include &lt;stdio.h&gt;</span>
+
+<span class="code-keyword">int</span> main() {
+    <span class="code-keyword">float</span> fahrenheit, celsius;
+
+    printf(<span class="code-string">"Enter temperature in Fahrenheit: "</span>);
+    scanf(<span class="code-string">"%f"</span>, &fahrenheit);
+
+    <span class="code-comment">// Note: We use 5.0/9.0 to ensure floating-point division</span>
+    celsius = (fahrenheit - <span class="code-number">32.0</span>) * <span class="code-number">5.0</span> / <span class="code-number">9.0</span>;
+
+    printf(<span class="code-string">"%.2f Fahrenheit is equal to %.2f Celsius.\n"</span>, fahrenheit, celsius);
+
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}
+</code></pre>
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Explanation:</h4>
+                        <p class="text-slate-700">This example deals with floating-point arithmetic. It's important to use `float` or `double` for temperatures to get accurate decimal results. In the calculation, we use `32.0`, `5.0`, and `9.0` instead of `32`, `5`, and `9`. This is crucial because in C, dividing two integers (e.g., `5 / 9`) results in an integer (which would be `0`), truncating the decimal part. By using floating-point literals, we ensure that the compiler performs floating-point division, yielding a correct decimal result.</p>
+                    </div>
+
+                    <!-- Problem 6 -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-800">Problem 6: Leap Year Checker</h3>
+                        <p class="mt-2 text-slate-700">Write a C program to check if a year entered by the user is a leap year. A leap year is divisible by 4, but century years are not leap years unless they are divisible by 400.</p>
+                        
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Solution:</h4>
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code class="language-c"><span class="code-preprocessor">#include &lt;stdio.h&gt;</span>
+
+<span class="code-keyword">int</span> main() {
+    <span class="code-keyword">int</span> year;
+
+    printf(<span class="code-string">"Enter a year: "</span>);
+    scanf(<span class="code-string">"%d"</span>, &year);
+
+    <span class="code-comment">// A year is a leap year if it's divisible by 400</span>
+    <span class="code-comment">// OR if it's divisible by 4 but NOT by 100.</span>
+    <span class="code-keyword">if</span> ((year % <span class="code-number">400</span> == <span class="code-number">0</span>) || (year % <span class="code-number">4</span> == <span class="code-number">0</span> && year % <span class="code-number">100</span> != <span class="code-number">0</span>)) {
+        printf(<span class="code-string">"%d is a leap year.\n"</span>, year);
+    } <span class="code-keyword">else</span> {
+        printf(<span class="code-string">"%d is not a leap year.\n"</span>, year);
+    }
+
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}
+</code></pre>
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Explanation:</h4>
+                        <p class="text-slate-700">This problem is a great exercise for logical operators. The condition `(year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)` perfectly translates the rule for leap years into C code. The parentheses are important to enforce the correct order of operations. The `&&` (AND) has higher precedence than `||` (OR), but using parentheses makes the logic explicit and easier to read.</p>
+                    </div>
+
+                    <!-- Problem 7 -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-800">Problem 7: Sum of the Digits of a 3-Digit Number</h3>
+                        <p class="mt-2 text-slate-700">Write a C program that takes a 3-digit integer from the user and calculates the sum of its digits.</p>
+                        
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Solution:</h4>
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code class="language-c"><span class="code-preprocessor">#include &lt;stdio.h&gt;</span>
+
+<span class="code-keyword">int</span> main() {
+    <span class="code-keyword">int</span> number, originalNumber;
+    <span class="code-keyword">int</span> digit1, digit2, digit3, sum;
+
+    printf(<span class="code-string">"Enter a 3-digit number: "</span>);
+    scanf(<span class="code-string">"%d"</span>, &number);
+
+    originalNumber = number; <span class="code-comment">// Save the original number for the output message</span>
+
+    <span class="code-comment">// Extract the last digit</span>
+    digit3 = number % <span class="code-number">10</span>;
+    number = number / <span class="code-number">10</span>; <span class="code-comment">// Remove the last digit</span>
+
+    <span class="code-comment">// Extract the new last digit (the middle one)</span>
+    digit2 = number % <span class="code-number">10</span>;
+    number = number / <span class="code-number">10</span>; <span class="code-comment">// Remove the last digit</span>
+
+    <span class="code-comment">// The remaining number is the first digit</span>
+    digit1 = number;
+
+    sum = digit1 + digit2 + digit3;
+
+    printf(<span class="code-string">"The sum of the digits of %d is %d.\n"</span>, originalNumber, sum);
+
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}
+</code></pre>
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Explanation:</h4>
+                        <p class="text-slate-700">This program demonstrates a powerful use of the modulo (`%`) and integer division (`/`) operators. `number % 10` always gives you the last digit of the number. `number / 10` (with integers) effectively removes the last digit. By repeating this process, we can isolate each digit of the number and then add them together.</p>
+                    </div>
+
+                    <!-- Problem 8 -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-800">Problem 8: Convert Lowercase Character to Uppercase</h3>
+                        <p class="mt-2 text-slate-700">Write a C program that reads a lowercase letter from the user and converts it to uppercase.</p>
+                        
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Solution:</h4>
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code class="language-c"><span class="code-preprocessor">#include &lt;stdio.h&gt;</span>
+
+<span class="code-keyword">int</span> main() {
+    <span class="code-keyword">char</span> lower, upper;
+
+    printf(<span class="code-string">"Enter a lowercase letter: "</span>);
+    scanf(<span class="code-string">" %c"</span>, &lower); <span class="code-comment">// Note the space before %c</span>
+
+    <span class="code-comment">// The ASCII values for 'a' through 'z' and 'A' through 'Z' are sequential.</span>
+    <span class="code-comment">// The difference between a lowercase letter and its uppercase version is constant.</span>
+    upper = lower - <span class="code-string">'a'</span> + <span class="code-string">'A'</span>;
+
+    printf(<span class="code-string">"The uppercase equivalent is: %c\n"</span>, upper);
+
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}
+</code></pre>
+                        <h4 class="font-medium text-slate-800 mt-4 mb-2">Explanation:</h4>
+                        <p class="text-slate-700">This example highlights that `char` variables are internally treated as small integers representing ASCII values. Because the ASCII codes for 'a'-'z' and 'A'-'Z' are consecutive, the difference between any lowercase letter and 'a' is the same as the difference between its corresponding uppercase letter and 'A'. The formula `lower - 'a' + 'A'` calculates the uppercase equivalent. The space in `scanf(" %c", ...)` is important; it tells `scanf` to skip any whitespace characters (like the Enter key pressed from a previous input) before reading the character.</p>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+        
+        <!-- Footer -->
+        <footer class="text-center mt-12 text-slate-500 text-sm">
+            <p>End of Topic 3: Introduction to C</p>
+        </footer>
+
+    </div>
+</body>
+</html>
+
+
+
