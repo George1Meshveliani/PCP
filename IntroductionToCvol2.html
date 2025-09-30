@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Guide to C Programming</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .code-keyword { color: #60A5FA; font-weight: 500; }
+        .code-comment { color: #4ADE80; }
+        .code-string { color: #F472B6; }
+        .code-preprocessor { color: #C084FC; }
+        .code-number { color: #FBBF24; }
+        section {
+            transition: all 0.3s ease-in-out;
+        }
+        section:hover {
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        h2 {
+            border-bottom-width: 2px;
+            border-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-5xl">
+
+        <header class="mb-12 text-center">
+            <h1 class="text-5xl font-extrabold text-slate-900">Comprehensive Guide to C Programming</h1>
+            <p class="text-xl text-slate-600 mt-3">From Fundamentals to Advanced Concepts</p>
+        </header>
+
+        <div class="space-y-16">
+            
+            <!-- SECTION 1: THE BASICS -->
+            <section id="basics" class="bg-white p-8 rounded-lg shadow-sm">
+                <h2 class="text-3xl font-bold text-slate-800 pb-4 mb-6">1. The Basics: Your First C Program</h2>
+                
+                <div id="structure" class="pt-4">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Anatomy of a C Program</h3>
+                    <p class="mb-4 text-slate-700 leading-relaxed">Every C program has a fundamental structure. The `main` function is the most critical part—it's the entry point where your program's execution begins.</p>
+                    <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code class="language-c"><span class="code-preprocessor">#include &lt;stdio.h&gt;</span>
+<span class="code-keyword">int</span> main() {
+    printf(<span class="code-string">"Hello, C!\n"</span>);
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}</code></pre>
+                </div>
+
+                <div id="compilation" class="pt-8">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">From Code to Executable</h3>
+                    <p class="mb-4 text-slate-700">Writing code is just the first step. To run it, you must compile it, which translates your human-readable code into machine-readable instructions.</p>
+                    <ol class="list-decimal list-inside space-y-2 pl-4 text-slate-700">
+                        <li><strong class="font-medium">Preprocessing:</strong> Handles lines starting with `#` (e.g., `#include`).</li>
+                        <li><strong class="font-medium">Compilation:</strong> Translates C code to assembly language.</li>
+                        <li><strong class="font-medium">Assembly:</strong> Converts assembly code into machine code (object files).</li>
+                        <li><strong class="font-medium">Linking:</strong> Combines your object files with libraries to create a final executable file.</li>
+                    </ol>
+                </div>
+                
+                <div id="variables-memory" class="pt-8">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Variables and Memory</h3>
+                    <p class="mb-4 text-slate-700 leading-relaxed">A variable is a named storage location in memory. When you declare `int score = 100;`, the system allocates memory to hold an integer, names that location `score`, and stores `100` there. Each location has a unique address.</p>
+                    
+                    <pre class="bg-slate-800 text-white p-4 rounded-md mt-4"><code class="language-c"><span class="code-comment">// Variable Declaration and Initialization Examples</span>
+<span class="code-keyword">int</span> age = <span class="code-number">30</span>;               <span class="code-comment">// An integer for whole numbers</span>
+<span class="code-keyword">float</span> price = <span class="code-number">19.99</span>;          <span class="code-comment">// A floating-point number for decimals</span>
+<span class="code-keyword">double</span> pi = <span class="code-number">3.1415926535</span>;  <span class="code-comment">// A double-precision float for more accuracy</span>
+<span class="code-keyword">char</span> grade = <span class="code-string">'A'</span>;            <span class="code-comment">// A single character (uses single quotes)</span>
+
+<span class="code-comment">// Using printf to display their values and addresses</span>
+printf(<span class="code-string">"Age: %d, Address: %p\n"</span>, age, &age);
+printf(<span class="code-string">"Price: %.2f, Address: %p\n"</span>, price, &price);
+printf(<span class="code-string">"Grade: %c, Address: %p\n"</span>, grade, &grade);
+</code></pre>
+                </div>
+                
+                <div id="io" class="pt-8">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Standard Input & Output (I/O)</h3>
+                    <p class="mb-4 text-slate-700">The `stdio.h` library gives you tools to communicate with the user.</p>
+                    <ul class="list-disc list-inside space-y-2 pl-4 text-slate-700">
+                        <li>`printf()`: For formatted <strong class="font-medium">output</strong>. You use format specifiers like `%d` (integer), `%f` (float), `%c` (character), and `%s` (string) to print variables.</li>
+                        <li>`scanf()`: For formatted <strong class="font-medium">input</strong>. It reads data from the user and stores it at the memory address of a variable (hence the `&` symbol).</li>
+                    </ul>
+                    <div class="mt-6 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-r-lg">
+                        <p><strong class="font-bold">Tricky Case: The Input Buffer.</strong> When you enter `10` and press Enter, both `10` and the newline character `\n` go into a buffer. `scanf("%d", ...)` reads the `10` but leaves the `\n`. A subsequent `scanf("%c", ...)` will read that leftover newline instead of waiting for your input. <strong class="font-medium">Fix:</strong> Use `scanf(" %c", ...)`—the leading space consumes any leftover whitespace.</p>
+                    </div>
+                </div>
+
+                <div id="operators" class="pt-8">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Operators</h3>
+                    <p class="mb-4 text-slate-700">Operators are symbols that perform operations on variables and values.</p>
+                    <ul class="list-disc list-inside space-y-2 pl-4 text-slate-700">
+                        <li><strong class="font-medium">Arithmetic:</strong> `+`, `-`, `*`, `/`, `%` (modulo/remainder).</li>
+                        <li><strong class="font-medium">Relational:</strong> `==`, `!=`, `>`, `<`, `>=`, `<=`. Used for comparison, they evaluate to true (1) or false (0).</li>
+                        <li><strong class="font-medium">Logical:</strong> `&&` (AND), `||` (OR), `!` (NOT). Used to combine relational expressions.</li>
+                        <li><strong class="font-medium">Bitwise:</strong> `&`, `|`, `^`, `~`, `<<`, `>>`. Operate on the individual bits of data.</li>
+                        <li><strong class="font-medium">Assignment:</strong> `=`, `+=`, `-=`, `*=`, `/=`. Assign values and perform operations simultaneously.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SECTION 2: CONTROL FLOW -->
+            <section id="control-flow" class="bg-white p-8 rounded-lg shadow-sm">
+                <h2 class="text-3xl font-bold text-slate-800 pb-4 mb-6">2. Control Flow: Directing Your Program</h2>
+                
+                <div id="conditionals" class="pt-4">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Conditional Statements</h3>
+                    <p class="mb-4 text-slate-700">These structures allow your program to make decisions based on conditions.</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-xl font-medium">`if-else if-else`</h4>
+                            <p class="text-slate-700 mt-2">Tests a series of conditions in order. The first one that is true gets executed.</p>
+                            <pre class="bg-slate-800 text-white p-4 rounded-md mt-4"><code class="language-c"><span class="code-keyword">if</span> (grade >= <span class="code-number">90</span>) { printf(<span class="code-string">"A"</span>); }
+<span class="code-keyword">else if</span> (grade >= <span class="code-number">80</span>) { printf(<span class="code-string">"B"</span>); }
+<span class="code-keyword">else</span> { printf(<span class="code-string">"C or lower"</span>); }
+</code></pre>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-medium">`switch`</h4>
+                            <p class="text-slate-700 mt-2">An efficient alternative when comparing a single variable against multiple constant integer or character values.</p>
+                            <pre class="bg-slate-800 text-white p-4 rounded-md mt-4"><code class="language-c"><span class="code-keyword">switch</span> (day) {
+    <span class="code-keyword">case</span> <span class="code-number">1</span>: printf(<span class="code-string">"Mon"</span>); <span class="code-keyword">break</span>;
+    <span class="code-keyword">case</span> <span class="code-number">2</span>: printf(<span class="code-string">"Tue"</span>); <span class="code-keyword">break</span>;
+    <span class="code-keyword">default</span>: printf(<span class="code-string">"Some other day"</span>);
+}
+</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="loops" class="pt-8">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Loops: Repeating Actions</h3>
+                    <p class="mb-4 text-slate-700">Loops are used to execute a block of code repeatedly until a condition is met.</p>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-xl font-medium">`for` loop</h4>
+                            <p class="text-slate-700 mt-2">Best when you know the number of iterations in advance. It combines initialization, condition checking, and increment/decrement in one line.</p>
+                            <pre class="bg-slate-800 text-white p-4 rounded-md mt-4"><code class="language-c"><span class="code-comment">// Example: Sum the first 10 integers</span>
+<span class="code-keyword">int</span> sum = <span class="code-number">0</span>;
+<span class="code-keyword">for</span> (<span class="code-keyword">int</span> i = <span class="code-number">1</span>; i <= <span class="code-number">10</span>; i++) {
+    sum += i;
+}
+printf(<span class="code-string">"Sum: %d\n"</span>, sum); <span class="code-comment">// Prints 55</span>
+</code></pre>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-medium">`while` loop</h4>
+                            <p class="text-slate-700 mt-2">Best when the loop should continue as long as a condition is true, but you don't know how many times it will run.</p>
+                             <pre class="bg-slate-800 text-white p-4 rounded-md mt-4"><code class="language-c"><span class="code-comment">// Example: Countdown from 5</span>
+<span class="code-keyword">int</span> count = <span class="code-number">5</span>;
+<span class="code-keyword">while</span> (count > <span class="code-number">0</span>) {
+    printf(<span class="code-string">"%d... "</span>, count);
+    count--; <span class="code-comment">// Must change the condition variable inside the loop!</span>
+}
+printf(<span class="code-string">"Liftoff!\n"</span>);
+</code></pre>
+                        </div>
+                         <div>
+                            <h4 class="text-xl font-medium">`do-while` loop</h4>
+                            <p class="text-slate-700 mt-2">Similar to `while`, but guarantees the loop body executes at least once because the condition is checked at the end.</p>
+                            <pre class="bg-slate-800 text-white p-4 rounded-md mt-4"><code class="language-c"><span class="code-comment">// Example: Menu that repeats until user quits</span>
+<span class="code-keyword">int</span> choice;
+<span class="code-keyword">do</span> {
+    printf(<span class="code-string">"1. Start\n2. Exit\n"</span>);
+    scanf(<span class="code-string">"%d"</span>, &choice);
+} <span class="code-keyword">while</span> (choice != <span class="code-number">2</span>);
+</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="loop-control" class="pt-8">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Loop Control</h3>
+                    <div class="flex items-center gap-8">
+                        <p class="text-slate-700"><strong class="font-medium">`break;`</strong><br>Immediately exits the current loop.</p>
+                        <p class="text-slate-700"><strong class="font-medium">`continue;`</strong><br>Skips the rest of the current iteration and starts the next one.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: FUNCTIONS -->
+            <section id="functions" class="bg-white p-8 rounded-lg shadow-sm">
+                <h2 class="text-3xl font-bold text-slate-800 pb-4 mb-6">3. Functions: Building Blocks of C</h2>
+                <p class="mb-4 text-slate-700 leading-relaxed">Functions are reusable blocks of code that perform a specific task. They make programs modular, easier to debug, and prevent code duplication.</p>
+
+                <div class="pt-4">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Declaration, Definition, and Call</h3>
+                    <pre class="bg-slate-800 text-white p-4 rounded-md mt-4"><code class="language-c"><span class="code-comment">// 1. Declaration (Prototype): Tells the compiler about the function ahead of time.</span>
+<span class="code-keyword">int</span> add(<span class="code-keyword">int</span> a, <span class="code-keyword">int</span> b);
+
+<span class="code-keyword">int</span> main() {
+    <span class="code-comment">// 3. Call: Execute the function and get its result.</span>
+    <span class="code-keyword">int</span> result = add(<span class="code-number">5</span>, <span class="code-number">10</span>);
+    printf(<span class="code-string">"Result is %d\n"</span>, result);
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}
+
+<span class="code-comment">// 2. Definition: The actual code that makes the function work.</span>
+<span class="code-keyword">int</span> add(<span class="code-keyword">int</span> a, <span class="code-keyword">int</span> b) {
+    <span class="code-keyword">return</span> a + b; <span class="code-comment">// The `return` keyword sends a value back to the caller.</span>
+}
+</code></pre>
+                </div>
+                
+                <div class="pt-8">
+                     <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Pass-by-Value vs. Pass-by-Reference</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-xl font-medium">Pass-by-Value (Default)</h4>
+                            <p class="text-slate-700 mt-2">The function gets a <strong class="font-medium">copy</strong> of the data. The original variable is unaffected.</p>
+                            <pre class="bg-slate-800 text-white p-4 rounded-md mt-4"><code class="language-c"><span class="code-keyword">void</span> my_func(<span class="code-keyword">int</span> copy_of_x) {
+    copy_of_x = <span class="code-number">100</span>; <span class="code-comment">// No effect outside</span>
+}</code></pre>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-medium">Pass-by-Reference (Simulated with Pointers)</h4>
+                            <p class="text-slate-700 mt-2">By passing a pointer (the variable's address), the function can access and modify the original data.</p>
+                            <pre class="bg-slate-800 text-white p-4 rounded-md mt-4"><code class="language-c"><span class="code-keyword">void</span> my_func(<span class="code-keyword">int</span>* address_of_x) {
+    *address_of_x = <span class="code-number">100</span>; <span class="code-comment">// Changes original</span>
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: ARRAYS -->
+            <section id="arrays" class="bg-white p-8 rounded-lg shadow-sm">
+                <h2 class="text-3xl font-bold text-slate-800 pb-4 mb-6">4. Arrays: Storing Collections of Data</h2>
+                <p class="mb-4 text-slate-700 leading-relaxed">An array is a fixed-size collection of elements of the same data type, stored in contiguous memory locations. This contiguous storage is what makes them fast and efficient.</p>
+                
+                <div id="array-length" class="pt-4">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Array Size vs. Length</h3>
+                    <p class="mb-4 text-slate-700">Unlike some other languages, C does not have a built-in property to get the number of elements in an array. You must calculate it using the `sizeof` operator, which returns the size of a variable or data type in bytes.</p>
+                    <p class="mb-2 text-slate-700 font-medium">The Formula:</p>
+                    <pre class="bg-slate-800 text-white p-4 rounded-md"><code class="language-c"><span class="code-keyword">int</span> length = <span class="code-keyword">sizeof</span>(my_array) / <span class="code-keyword">sizeof</span>(my_array[<span class="code-number">0</span>]);</code></pre>
+                    <ul class="list-disc list-inside space-y-2 pl-4 text-slate-700 mt-4">
+                        <li>`sizeof(my_array)` gives the total bytes occupied by the entire array.</li>
+                        <li>`sizeof(my_array[0])` gives the bytes occupied by a single element.</li>
+                        <li>Dividing the total size by the single element size gives you the number of elements.</li>
+                    </ul>
+                     <div class="mt-6 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-r-lg">
+                        <p><strong class="font-bold">Crucial Limitation:</strong> This technique <strong class="font-medium">only works</strong> in the same scope where the array is defined. When you pass an array to a function, it "decays" into a pointer to its first element, and `sizeof` will just give you the size of the pointer (usually 4 or 8 bytes), not the whole array. This is why you must always pass the size of the array as a separate argument to functions.</p>
+                    </div>
+                </div>
+
+                <div id="one-d-arrays" class="pt-8">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">One-Dimensional Arrays</h3>
+                    <p class="mb-4 text-slate-700">A simple list of elements. You access elements using an index, which always starts at 0.</p>
+                    <pre class="bg-slate-800 text-white p-4 rounded-md"><code class="language-c"><span class="code-comment">// Declaration and Initialization</span>
+<span class="code-keyword">int</span> grades[] = {<span class="code-number">88</span>, <span class="code-number">92</span>, <span class="code-number">75</span>, <span class="code-number">98</span>, <span class="code-number">85</span>, <span class="code-number">95</span>}; <span class="code-comment">// Size is inferred by compiler</span>
+<span class="code-keyword">int</span> num_grades = <span class="code-keyword">sizeof</span>(grades) / <span class="code-keyword">sizeof</span>(grades[<span class="code-number">0</span>]); <span class="code-comment">// Calculate length</span>
+
+<span class="code-comment">// Looping through an array to find the sum</span>
+<span class="code-keyword">int</span> sum = <span class="code-number">0</span>;
+<span class="code-keyword">for</span> (<span class="code-keyword">int</span> i = <span class="code-number">0</span>; i < num_grades; i++) {
+    sum += grades[i];
+}
+printf(<span class="code-string">"Average grade: %d\n"</span>, sum / num_grades);
+</code></pre>
+                </div>
+                
+                <div id="multi-d-arrays" class="pt-8">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Multi-Dimensional Arrays & Nested Loops</h3>
+                    <p class="mb-4 text-slate-700">An array of arrays, most commonly used to represent grids or matrices. To process every element in a 2D array, you need nested `for` loops. The outer loop iterates through the rows, and the inner loop iterates through the columns of each row.</p>
+                    <pre class="bg-slate-800 text-white p-4 rounded-md"><code class="language-c"><span class="code-comment">// A 2x3 matrix (2 rows, 3 columns)</span>
+<span class="code-keyword">int</span> matrix[<span class="code-number">2</span>][<span class="code-number">3</span>] = { {<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>}, {<span class="code-number">4</span>, <span class="code-number">5</span>, <span class="code-number">6</span>} };
+
+<span class="code-comment">// Looping through a 2D array</span>
+<span class="code-keyword">for</span> (<span class="code-keyword">int</span> i = <span class="code-number">0</span>; i < <span class="code-number">2</span>; i++) { <span class="code-comment">// Outer loop for rows</span>
+    <span class="code-keyword">for</span> (<span class="code-keyword">int</span> j = <span class="code-number">0</span>; j < <span class="code-number">3</span>; j++) { <span class="code-comment">// Inner loop for columns</span>
+        printf(<span class="code-string">"Element at [%d][%d] is %d\n"</span>, i, j, matrix[i][j]);
+    }
+    printf(<span class="code-string">"---\n"</span>); <span class="code-comment">// Separator after each row</span>
+}
+</code></pre>
+                </div>
+
+                <div id="key-value-arrays" class="pt-8">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Simulating "Key => Value" Pairs</h3>
+                    <p class="mb-4 text-slate-700">C does not have built-in associative arrays (or dictionaries) where you can use a string as a "key" to get a value. C arrays are indexed by integers (0, 1, 2, ...). However, you can simulate this behavior, and the best way is with an <strong class="font-medium">array of structs</strong>.</p>
+                    <p class="mb-4 text-slate-700">By defining a `struct` that holds your key and value, you can create an array where each element contains a related key-value pair. This is the standard and most powerful way to handle structured, related data in C.</p>
+                    <pre class="bg-slate-800 text-white p-4 rounded-md"><code class="language-c"><span class="code-comment">// Define a structure to hold a "key" (name) and a "value" (score)</span>
+<span class="code-keyword">struct</span> ScoreRecord {
+    <span class="code-keyword">char</span> name[<span class="code-number">50</span>];
+    <span class="code-keyword">int</span> score;
+};
+
+<span class="code-keyword">int</span> main() {
+    <span class="code-comment">// Create an array of these structures</span>
+    <span class="code-keyword">struct</span> ScoreRecord records[] = {
+        {<span class="code-string">"Alice"</span>, <span class="code-number">95</span>},
+        {<span class="code-string">"Bob"</span>, <span class="code-number">88</span>},
+        {<span class="code-string">"Charlie"</span>, <span class="code-number">92</span>}
+    };
+    
+    <span class="code-keyword">int</span> num_records = <span class="code-keyword">sizeof</span>(records) / <span class="code-keyword">sizeof</span>(records[<span class="code-number">0</span>]);
+
+    <span class="code-comment">// Loop through the array and access data using the . operator</span>
+    printf(<span class="code-string">"--- Scoreboard ---\n"</span>);
+    <span class="code-keyword">for</span> (<span class="code-keyword">int</span> i = <span class="code-number">0</span>; i < num_records; i++) {
+        printf(<span class="code-string">"Key: %s => Value: %d\n"</span>, records[i].name, records[i].score);
+    }
+    <span class="code-keyword">return</span> <span class="code-number">0</span>;
+}
+</code></pre>
+                </div>
+            </section>
+            
+            <!-- SECTION 5: POINTERS -->
+            <section id="memory-pointers" class="bg-white p-8 rounded-lg shadow-sm">
+                <h2 class="text-3xl font-bold text-slate-800 pb-4 mb-6">5. Pointers and Memory Management</h2>
+                
+                <div id="pointers-revisited" class="pt-4">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Understanding Pointers</h3>
+                     <p class="mb-4 text-slate-700 leading-relaxed">A <strong class="font-medium">pointer</strong> is a variable that stores the <strong class="font-medium">memory address</strong> of another variable. They are the most powerful and challenging feature of C.</p>
+                    <ul class="list-disc list-inside space-y-2 pl-4 text-slate-700">
+                        <li><strong class="font-medium">`&` (Address-Of):</strong> Gets the memory address. `&var`</li>
+                        <li><strong class="font-medium">`*` (Dereference):</strong> Gets the value at a memory address. `*ptr`</li>
+                    </ul>
+                     <pre class="bg-slate-800 text-white p-4 rounded-md mt-4"><code class="language-c"><span class="code-keyword">int</span> num = <span class="code-number">100</span>;
+<span class="code-keyword">int</span>* p_num = &num; <span class="code-comment">// p_num now holds the address of num</span>
+*p_num = <span class="code-number">200</span>; <span class="code-comment">// This changes the value of num to 200!</span>
+</code></pre>
+                </div>
+
+                <div id="arrays-pointers" class="pt-8">
+                     <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Arrays are Pointers in Disguise</h3>
+                     <p class="mb-4 text-slate-700 leading-relaxed">The name of an array is essentially a constant pointer to its first element. This is why you can use pointer arithmetic to access array elements.</p>
+                     <pre class="bg-slate-800 text-white p-4 mt-4 rounded-md"><code class="language-c"><span class="code-keyword">int</span> arr[<span class="code-number">3</span>] = {<span class="code-number">10</span>, <span class="code-number">20</span>, <span class="code-number">30</span>};
+<span class="code-comment">// arr[1] is the same as *(arr + 1)</span>
+printf(<span class="code-string">"Second element: %d\n"</span>, *(arr + <span class="code-number">1</span>)); <span class="code-comment">// Prints 20</span>
+</code></pre>
+                </div>
+            </section>
+
+            <!-- SECTION 6: ADVANCED DATA -->
+            <section id="advanced-data" class="bg-white p-8 rounded-lg shadow-sm">
+                <h2 class="text-3xl font-bold text-slate-800 pb-4 mb-6">6. Advanced Data: Strings and Structs</h2>
+                
+                <div id="strings" class="pt-4">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">C-Style Strings</h3>
+                    <p class="mb-4 text-slate-700 leading-relaxed">A string in C is just an array of characters ending with a special null terminator character, `\0`. This null character is crucial—it's how functions know where the string ends.</p>
+                    <pre class="bg-slate-800 text-white p-4 rounded-md"><code class="language-c"><span class="code-keyword">char</span> my_name[] = <span class="code-string">"Alice"</span>; <span class="code-comment">// Actually {'A','l','i','c','e','\0'}</span>
+</code></pre>
+                    <p class="mt-4 text-slate-700">The `<string.h>` library provides functions like `strlen()` (get length), `strcpy()` (copy), and `strcat()` (concatenate).</p>
+                </div>
+                
+                <div id="structs" class="pt-8">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Structs: Custom Data Types</h3>
+                    <p class="mb-4 text-slate-700">A `struct` lets you group different data types into a single, user-defined type.</p>
+                    <pre class="bg-slate-800 text-white p-4 rounded-md"><code class="language-c"><span class="code-keyword">struct</span> Student {
+    <span class="code-keyword">int</span> id;
+    <span class="code-keyword">char</span> name[<span class="code-number">50</span>];
+    <span class="code-keyword">float</span> gpa;
+};
+
+<span class="code-keyword">int</span> main() {
+    <span class="code-keyword">struct</span> Student s1;
+    s1.id = <span class="code-number">1</span>;
+    strcpy(s1.name, <span class="code-string">"Bob"</span>);
+    s1.gpa = <span class="code-number">3.8</span>;
+}
+</code></pre>
+                </div>
+            </section>
+            
+            <!-- PROBLEMS -->
+            <section id="problems-comprehensive" class="bg-white p-8 rounded-lg shadow-sm">
+                <h2 class="text-3xl font-bold text-slate-800 pb-4 mb-6">Practice Problems</h2>
+                 <div class="pt-4">
+                    <h3 class="text-2xl font-semibold text-green-600 mb-4">Simple</h3>
+                    <ol class="list-decimal list-inside space-y-2 pl-4 text-slate-700">
+                        <li>Print all numbers from 1 to 100 that are divisible by 7.</li>
+                        <li>Create a simple calculator using a `switch` statement.</li>
+                        <li>Find the largest of three numbers using if-else and the ternary operator.</li>
+                        <li>Read 5 integers into an array, then find and print the largest element.</li>
+                        <li>Ask for a name and print a personalized greeting using `fgets`.</li>
+                    </ol>
+                </div>
+                <div class="pt-8">
+                    <h3 class="text-2xl font-semibold text-yellow-600 mb-4">Medium</h3>
+                    <ol class="list-decimal list-inside space-y-2 pl-4 text-slate-700">
+                        <li>Check if a string is a palindrome.</li>
+                        <li>Write a function to calculate the factorial of a number.</li>
+                        <li>Implement a function to reverse an array in-place.</li>
+                        <li>Print a full pyramid pattern of stars.</li>
+                        <li>Count the number of vowels and consonants in a string.</li>
+                    </ol>
+                </div>
+                 <div class="pt-8">
+                    <h3 class="text-2xl font-semibold text-orange-600 mb-4">Hard</h3>
+                     <ol class="list-decimal list-inside space-y-2 pl-4 text-slate-700">
+                        <li>Multiply two 2x2 matrices and store the result in a third matrix.</li>
+                        <li>Implement the Bubble Sort algorithm using pointers.</li>
+                        <li>Reverse a string in place using only pointers.</li>
+                        <li>Write a function to check if a number is prime, and use it to print all primes up to 100.</li>
+                        <li>Write a function that takes a 2D array (matrix) and returns the sum of its diagonal elements.</li>
+                    </ol>
+                </div>
+                <div class="pt-8">
+                    <h3 class="text-2xl font-semibold text-red-600 mb-4">Advanced</h3>
+                    <ol class="list-decimal list-inside space-y-2 pl-4 text-slate-700">
+                        <li>Display command-line arguments using `argc` and `argv`.</li>
+                        <li>Write a recursive function to calculate the length of a string.</li>
+                        <li>Find the second largest element in an array in a single pass.</li>
+                        <li>Tokenize a string using the `strtok` function.</li>
+                        <li>Manage an array of `Student` structs (input and display data for 3 students).</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- SOLUTIONS -->
+            <section id="solutions-comprehensive" class="bg-slate-900 text-white p-8 rounded-lg shadow-sm">
+                <h2 class="text-3xl font-bold border-b border-slate-600 pb-4 mb-6">Problem Solutions</h2>
+                <div class="space-y-10">
+                    <div><h3 class="text-2xl font-semibold text-green-400 mb-4">Simple Solutions</h3>
+                        <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">1. Divisible by 7</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    for (int i = 1; i &lt;= 100; i++) {
+        if (i % 7 == 0) {
+            printf("%d ", i);
+        }
+    }
+    printf("\n");
+    return 0;
+}</code></pre>
+                            <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> A `for` loop iterates from 1 to 100. The modulo operator (`%`) checks for a remainder. If `i % 7` is 0, the number is perfectly divisible by 7 and is printed.</p>
+                        </div>
+                        <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">2. Simple Calculator</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    char op;
+    double first, second;
+    printf("Enter an operator (+, -, *, /): ");
+    scanf(" %c", &op);
+    printf("Enter two operands: ");
+    scanf("%lf %lf", &first, &second);
+
+    switch (op) {
+        case '+': printf("%.1lf + %.1lf = %.1lf\n", first, second, first + second); break;
+        case '-': printf("%.1lf - %.1lf = %.1lf\n", first, second, first - second); break;
+        case '*': printf("%.1lf * %.1lf = %.1lf\n", first, second, first * second); break;
+        case '/': printf("%.1lf / %.1lf = %.1lf\n", first, second, first / second); break;
+        default: printf("Error! operator is not correct\n");
+    }
+    return 0;
+}</code></pre>
+                             <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> The program reads a character for the operator and two `double` values. A `switch` statement then executes the correct arithmetic operation based on the operator character.</p>
+                        </div>
+                        <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">3. Largest of Three Numbers</p>
+                             <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int n1 = 10, n2 = 25, n3 = 15;
+    // Using if-else
+    if (n1 >= n2 && n1 >= n3)
+        printf("%d is the largest number.\n", n1);
+    else if (n2 >= n1 && n2 >= n3)
+        printf("%d is the largest number.\n", n2);
+    else
+        printf("%d is the largest number.\n", n3);
+        
+    // Using ternary operator
+    int largest = (n1 > n2) ? ((n1 > n3) ? n1 : n3) : ((n2 > n3) ? n2 : n3);
+    printf("Largest using ternary: %d\n", largest);
+    
+    return 0;
+}</code></pre>
+                            <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> The `if-else` version checks all conditions logically. The ternary version provides a more compact (but less readable) way to achieve the same result with nested conditional expressions.</p>
+                        </div>
+                        <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">4. Find Largest Element in Array</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int arr[5] = {10, 45, 2, 98, 23};
+    int max = arr[0];
+    for (int i = 1; i < 5; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    printf("Largest element is %d\n", max);
+    return 0;
+}</code></pre>
+                            <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> We initialize `max` with the first element of the array. Then, we loop through the rest of the array. If any element is greater than the current `max`, we update `max` to that element's value.</p>
+                        </div>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">5. Personalized Greeting</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+int main() {
+    char name[50];
+    printf("Enter your name: ");
+    fgets(name, 50, stdin);
+    // fgets reads the newline, so we remove it
+    name[strcspn(name, "\n")] = 0;
+    printf("Hello, %s!\n", name);
+    return 0;
+}</code></pre>
+                             <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> `fgets` is used for safe string input. A tricky part is that it also reads the newline character when you press Enter. `strcspn` is used to find the first occurrence of the newline `\n` and we replace it with a null terminator `\0` to clean up the string.</p>
+                        </div>
+                    </div>
+                     <div><h3 class="text-2xl font-semibold text-yellow-400 mb-4">Medium Solutions</h3>
+                        <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">6. Palindrome Checker</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+int main() {
+    char str[] = "madam";
+    int l = 0;
+    int h = strlen(str) - 1;
+    int isPalindrome = 1;
+
+    while (h > l) {
+        if (str[l++] != str[h--]) {
+            isPalindrome = 0;
+            break;
+        }
+    }
+    if (isPalindrome) printf("%s is a palindrome\n", str);
+    else printf("%s is not a palindrome\n", str);
+    return 0;
+}</code></pre>
+                             <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> Two index variables, `l` (low) and `h` (high), start at the beginning and end of the string. They move towards the center, comparing characters. If a mismatch is found, a flag is set, and the loop breaks.</p>
+                        </div>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">7. Factorial Function</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+long long factorial(int n) {
+    if (n == 0) return 1;
+    long long fact = 1;
+    for (int i = 1; i &lt;= n; ++i) {
+        fact *= i;
+    }
+    return fact;
+}
+int main() {
+    int num = 6;
+    printf("Factorial of %d is %lld\n", num, factorial(num));
+    return 0;
+}</code></pre>
+                             <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> The `factorial` function takes an integer `n`. It initializes a `long long` variable `fact` to 1 and uses a `for` loop to multiply it by every integer from 1 up to `n`. `long long` is used to prevent overflow for larger numbers.</p>
+                        </div>
+                        <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">8. Reverse an Array</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+void reverseArray(int arr[], int size) {
+    int start = 0;
+    int end = size - 1;
+    while (start < end) {
+        int temp = arr[start];
+        arr[start] = arr[end];
+        arr[end] = temp;
+        start++;
+        end--;
+    }
+}
+int main() {
+    int arr[] = {1, 2, 3, 4, 5};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    reverseArray(arr, n);
+    printf("Reversed array: ");
+    for(int i=0; i < n; i++) printf("%d ", arr[i]);
+    printf("\n");
+    return 0;
+}</code></pre>
+                            <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> Similar to the palindrome logic, two indices start at the ends of the array. The elements at these indices are swapped. The indices then move towards the center until they cross, reversing the array in place.</p>
+                        </div>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">9. Pyramid Pattern</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int rows = 5;
+    for (int i = 1; i &lt;= rows; ++i) {
+        for (int space = 1; space &lt;= rows - i; ++space) {
+           printf("  ");
+        }
+        for (int j = 1; j &lt;= 2 * i - 1; ++j) {
+           printf("* ");
+        }
+        printf("\n");
+    }
+    return 0;
+}</code></pre>
+                             <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> This uses nested loops. The outer loop controls the number of rows. The first inner loop prints the leading spaces for alignment. The second inner loop prints the stars for that row.</p>
+                        </div>
+                        <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">10. Count Vowels and Consonants</p>
+                             <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+int main() {
+    char str[] = "Hello World";
+    int vowels = 0, consonants = 0;
+    for (int i = 0; str[i] != '\0'; ++i) {
+        char ch = tolower(str[i]);
+        if (ch >= 'a' && ch &lt;= 'z') {
+            if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u') {
+                vowels++;
+            } else {
+                consonants++;
+            }
+        }
+    }
+    printf("Vowels: %d, Consonants: %d\n", vowels, consonants);
+    return 0;
+}</code></pre>
+                            <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> The code iterates through the string. Each character is converted to lowercase using `tolower()` for easier comparison. It first checks if the character is an alphabet letter, then checks if it's one of the vowels.</p>
+                        </div>
+                    </div>
+                     <div><h3 class="text-2xl font-semibold text-orange-400 mb-4">Hard Solutions</h3>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">11. Matrix Multiplication</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int a[2][2] = {{1, 2}, {3, 4}};
+    int b[2][2] = {{5, 6}, {7, 8}};
+    int result[2][2];
+
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            result[i][j] = 0;
+            for (int k = 0; k < 2; k++) {
+                result[i][j] += a[i][k] * b[k][j];
+            }
+        }
+    }
+
+    printf("Result matrix:\n");
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            printf("%d ", result[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}</code></pre>
+                            <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> Three nested loops are required. The outer two (`i` and `j`) iterate over the rows and columns of the result matrix. The innermost loop (`k`) calculates the dot product for each cell `result[i][j]`.</p>
+                        </div>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">12. Bubble Sort with Pointers</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+void swap(int* xp, int* yp) {
+    int temp = *xp; *xp = *yp; *yp = temp;
+}
+void bubbleSort(int* arr, int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (*(arr + j) > *(arr + j + 1)) {
+                swap(arr + j, arr + j + 1);
+            }
+        }
+    }
+}
+int main() {
+    int arr[] = {64, 34, 25, 12, 22};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    bubbleSort(arr, n);
+    printf("Sorted array: ");
+    for(int i=0; i < n; i++) printf("%d ", arr[i]);
+    printf("\n");
+    return 0;
+}
+</code></pre>
+                            <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> This uses pointer arithmetic (`*(arr + j)`) to access array elements instead of array indexing (`arr[j]`). A helper `swap` function that accepts pointers is used to swap the elements' values directly in memory.</p>
+                        </div>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">13. Reverse String with Pointers</p>
+                             <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+void reverse_string(char* str) {
+    char* end = str + strlen(str) - 1;
+    while (str < end) {
+        char temp = *str;
+        *str = *end;
+        *end = temp;
+        str++;
+        end--;
+    }
+}
+int main() {
+    char my_str[] = "C Programming";
+    reverse_string(my_str);
+    printf("Reversed: %s\n", my_str);
+    return 0;
+}</code></pre>
+                            <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> This function uses two pointers, one starting at the beginning (`str`) and one at the end (`end`). It swaps the characters they point to, then increments the start pointer and decrements the end pointer, moving them towards the middle until they cross.</p>
+                        </div>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">14. Prime Number Function</p>
+                             <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+int isPrime(int n) {
+    if (n <= 1) return 0; // Not prime
+    for (int i = 2; i <= sqrt(n); i++) {
+        if (n % i == 0) return 0; // Not prime
+    }
+    return 1; // Prime
+}
+int main() {
+    printf("Prime numbers up to 100:\n");
+    for (int i = 1; i <= 100; i++) {
+        if (isPrime(i)) {
+            printf("%d ", i);
+        }
+    }
+    printf("\n");
+    return 0;
+}</code></pre>
+                             <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> The `isPrime` function checks for divisibility only up to the square root of `n`, which is a key optimization. The `main` function then calls this helper for every number from 1 to 100.</p>
+                        </div>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">15. Sum of Matrix Diagonal</p>
+                             <pre><code class="language-c">#include &lt;stdio.h&gt;
+#define SIZE 3
+int diagonalSum(int mat[SIZE][SIZE]) {
+    int sum = 0;
+    for (int i = 0; i < SIZE; i++) {
+        sum += mat[i][i];
+    }
+    return sum;
+}
+int main() {
+    int mat[SIZE][SIZE] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    printf("Diagonal sum: %d\n", diagonalSum(mat));
+    return 0;
+}</code></pre>
+                             <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> The main diagonal consists of elements where the row index equals the column index (`mat[i][i]`). A single loop is sufficient to iterate through these diagonal elements and add them to a sum.</p>
+                        </div>
+                    </div>
+                     <div><h3 class="text-2xl font-semibold text-red-400 mb-4">Advanced Solutions</h3>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">16. Command-Line Arguments</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+// Run from terminal like: ./my_program hello world 123
+int main(int argc, char *argv[]) {
+    printf("You have entered %d arguments:\n", argc);
+    for (int i = 0; i < argc; i++) {
+        printf("%s\n", argv[i]);
+    }
+    return 0;
+}</code></pre>
+                             <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> The `main` function can accept two arguments: `argc` (argument count) and `argv` (argument vector), which is an array of strings. `argv[0]` is always the name of the program itself.</p>
+                        </div>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">17. Recursive String Length</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+int recursive_strlen(char *s) {
+    if (*s == '\0') {
+        return 0; // Base case: end of string
+    }
+    return 1 + recursive_strlen(s + 1); // Recursive step
+}
+int main() {
+    char str[] = "hello";
+    printf("Length is: %d\n", recursive_strlen(str));
+    return 0;
+}</code></pre>
+                            <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> The function has a base case: if it points to the null terminator, the length is 0. Otherwise, the length is 1 (for the current character) plus the length of the rest of the string, found by calling itself on the next character (`s + 1`).</p>
+                        </div>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">18. Second Largest Element</p>
+                            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+int main() {
+    int arr[] = {100, 0, 50, 80, 90};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    int first = INT_MIN, second = INT_MIN;
+
+    for (int i = 0; i < n; i++) {
+        if (arr[i] > first) {
+            second = first;
+            first = arr[i];
+        } else if (arr[i] > second && arr[i] < first) {
+            second = arr[i];
+        }
+    }
+    printf("Second largest is %d\n", second);
+    return 0;
+}</code></pre>
+                            <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> This efficient solution finds the second largest element in one pass. It tracks the `first` and `second` largest numbers found so far. It updates them as it iterates through the array, handling cases where the new number is larger than the current `first` or between `first` and `second`.</p>
+                        </div>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">19. Tokenize a String</p>
+                             <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+int main() {
+    char str[] = "This is a sample string";
+    char* token = strtok(str, " ");
+    while (token != NULL) {
+        printf("%s\n", token);
+        token = strtok(NULL, " ");
+    }
+    return 0;
+}</code></pre>
+                            <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> The `strtok` function from `<string.h>` is used to split a string. The first call to `strtok` takes the string and the delimiter. Subsequent calls use `NULL` as the first argument to continue tokenizing the same string. `strtok` modifies the original string by placing null terminators (`\0`) where delimiters are found.</p>
+                        </div>
+                         <div class="p-4 bg-slate-800 rounded-md mb-4">
+                            <p class="font-semibold mb-2">20. Manage Array of Structs</p>
+                             <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+struct Student {
+    int id;
+    char name[50];
+    float gpa;
+};
+int main() {
+    struct Student students[3];
+    for (int i = 0; i < 3; i++) {
+        students[i].id = i + 1;
+        printf("Enter name for student %d: ", i + 1);
+        fgets(students[i].name, 50, stdin);
+        students[i].name[strcspn(students[i].name, "\n")] = 0;
+        printf("Enter GPA for student %d: ", i + 1);
+        scanf("%f", &students[i].gpa);
+        getchar(); // Consume the newline left by scanf
+    }
+    printf("\n--- Student Data ---\n");
+    for (int i = 0; i < 3; i++) {
+        printf("ID: %d, Name: %s, GPA: %.2f\n", students[i].id, students[i].name, students[i].gpa);
+    }
+    return 0;
+}</code></pre>
+                             <p class="mt-3 text-sm text-slate-300"><strong>Explanation:</strong> An array of `Student` structs is declared. A loop is used to populate the data for each student. Note the use of `getchar()` to consume the leftover newline from `scanf` before the next `fgets` call in the loop.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <footer class="text-center mt-16 text-slate-500 text-sm">
+            <p>End of Guide: Comprehensive Introduction to C</p>
+        </footer>
+
+    </div>
+</body>
+</html>
+
+
+
