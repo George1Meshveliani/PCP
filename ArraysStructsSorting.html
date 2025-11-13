@@ -1,0 +1,2329 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Guide: Arrays, Structs & Sorting</title>
+    <!-- Import Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Add MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <!-- Add MathJax script for LaTeX rendering -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        /* Use the Inter font family */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Custom styles for the prose content */
+        .prose h1, .prose h2, .prose h3 {
+            color: #111827; /* dark:text-white */
+        }
+        .dark .prose h1, .dark .prose h2, .dark .prose h3 {
+            color: #ffffff;
+        }
+        
+        /* Custom styles for code blocks */
+        .prose pre {
+            background-color: #f3f4f6; /* dark:bg-gray-800 */
+            border: 1px solid #e5e7eb; /* dark:border-gray-700 */
+            color: #111827; /* dark:text-gray-100 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        .dark .prose pre {
+            background-color: #1f2937;
+            border-color: #374151;
+            color: #f3f4f6;
+        }
+        .prose code {
+            background-color: #e5e7eb; /* dark:bg-gray-700 */
+            color: #dc2626; /* dark:text-red-400 */
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+        .dark .prose code {
+            background-color: #374151;
+            color: #f87171;
+        }
+        .prose pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+            font-weight: normal;
+        }
+        
+        /* Active tab styling */
+        .nav-btn.active {
+            background-color: #2563eb; /* bg-blue-600 */
+            color: #ffffff; /* text-white */
+        }
+        .nav-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        /* Custom style for text-based simulations */
+        .simulation {
+            background-color: #f9fafb; /* dark:bg-gray-900 */
+            border: 1px solid #e5e7eb; /* dark:border-gray-700 */
+            border-left: 4px solid #3b82f6; /* border-blue-500 */
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+        .dark .simulation {
+             background-color: #1f2937;
+             border-color: #374151;
+        }
+        .simulation strong {
+            color: #1e40af; /* dark:text-blue-300 */
+        }
+        .dark .simulation strong {
+            color: #93c5fd;
+        }
+        .simulation .dim {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <header class="text-center mb-10 border-b border-gray-300 dark:border-gray-700 pb-6">
+            <h1 class="text-4xl md:text-5xl font-bold text-blue-600 dark:text-blue-400">
+                Advanced C Programming Guide
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 mt-2">
+                Arrays, Strings, Functions, Structs, and Sorting
+            </p>
+        </header>
+
+        <!-- Navigation Bar -->
+        <nav class="flex flex-wrap justify-center gap-2 md:gap-4 mb-10">
+            <button id="btn-topic1" class="nav-btn active px-4 py-2 text-sm md:text-base font-medium rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700" onclick="showPage('page-topic1', this)">
+                Topic 1: Arrays, Strings & Functions
+            </button>
+            <button id="btn-topic2" class="nav-btn px-4 py-2 text-sm md:text-base font-medium rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700" onclick="showPage('page-topic2', this)">
+                Topic 2: Sorting & Structs
+            </button>
+            <button id="btn-topic3" class="nav-btn px-4 py-2 text-sm md:text-base font-medium rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700" onclick="showPage('page-topic3', this)">
+                Topic 3: Pointers & Advanced Strings
+            </button>
+            <button id="btn-problems" class="nav-btn px-4 py-2 text-sm md:text-base font-medium rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700" onclick="showPage('page-problems', this)">
+                Practice Problems
+            </button>
+            <button id="btn-solutions" class="nav-btn px-4 py-2 text-sm md:text-base font-medium rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700" onclick="showPage('page-solutions', this)">
+                Problem Solutions
+            </button>
+        </nav>
+
+        <!-- Page Content: Topic 1 -->
+        <section id="page-topic1" class="page-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 md:p-10">
+            <article class="prose dark:prose-invert max-w-none">
+                <h1 class="text-3xl font-bold border-b border-gray-300 dark:border-gray-600 pb-2">Topic 1: The Core Building Blocks: Arrays, Strings, and Functions</h1>
+                <p>This section covers the fundamental tools in C. Functions allow us to create modular, reusable code. Arrays and strings provide the mechanisms to store and manipulate collections of data.</p>
+
+                <h2>One-Dimensional Arrays</h2>
+                <p>An array is a contiguous block of memory that stores multiple values of the <em>same data type</em>. You can access any element directly using its <strong>index</strong>.</p>
+                
+                <h3>Array Element and Index Relationship</h3>
+                <p>The <strong>index</strong> is an integer that specifies the position of an element in the array. C arrays are <strong>zero-indexed</strong>, meaning the first element is at index 0, the second at index 1, and so on. The last element is at index `size - 1`.</p>
+                
+                <div class="simulation">
+                    <strong>Memory Concept:</strong> <code>int arr[4];</code><br>
+                    - <code>arr[0]</code> is at the base memory address (e.g., address 1000)<br>
+                    - <code>arr[1]</code> is at address 1000 + <code>sizeof(int)</code> (e.g., 1004)<br>
+                    - <code>arr[2]</code> is at address 1000 + 2 * <code>sizeof(int)</code> (e.g., 1008)<br>
+                    - <code>arr[3]</code> is at address 1000 + 3 * <code>sizeof(int)</code> (e.g., 1012)
+                </div>
+
+                <pre><code class="language-c">// Declaration: type name[size];
+int numbers[10];  // An array to hold 10 integers
+
+// Initialization
+float grades[5] = {90.5, 88.0, 92.3, 79.9, 85.1};
+
+// Accessing and modifying elements (zero-based index)
+numbers[0] = 5;  // Set the first element
+numbers[9] = -3; // Set the last element
+
+int first_number = numbers[0]; // Read the first element</code></pre>
+
+                <h2>Functions</h2>
+                <p>A function is a self-contained block of code that performs a specific task. It helps organize code, making it more readable, maintainable, and reusable. Every C program has at least one function: `main()`.</p>
+                <pre><code class="language-c">// Function prototype (declaration)
+// Tells the compiler that this function exists
+int add(int a, int b);
+
+// main function - program entry point
+int main() {
+    int sum = add(5, 10); // Function call
+    printf("The sum is: %d\n", sum);
+    return 0;
+}
+
+// Function definition (implementation)
+int add(int a, int b) {
+    int result = a + b;
+    return result; // Returns a value
+}</code></pre>
+                
+                <h3>Passing Arrays to Functions</h3>
+                <p>When you pass an array to a function, you are actually passing a <strong>pointer</strong> to its first element. This means the function can modify the original array. It's crucial to also pass the <strong>size</strong> of the array so the function knows where to stop.</p>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// The function takes a pointer to an int (the array) and its size
+void printArray(int arr[], int size) {
+    printf("Array elements: ");
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+        // arr[i] = 0; // This would modify the *original* array
+    }
+    printf("\n");
+}
+
+int main() {
+    int myNumbers[5] = {10, 20, 30, 40, 50};
+    // We pass the array and its size
+    printArray(myNumbers, 5); 
+    return 0;
+}</code></pre>
+
+                <h2>Characters and Strings</h2>
+                <p>In C, there is no built-in string type. A "string" is simply an <strong>array of characters (`char`)</strong> that ends with a special null-terminator character: `\0`.</p>
+                <p>The `\0` is critical. It's how functions like `printf` (with `%s`) or `strlen` know where the string ends.</p>
+                <pre><code class="language-c">// "Hello" is 5 letters, but needs 6 chars of storage
+char greeting[6] = {'H', 'e', 'l', 'l', 'o', '\0'};
+
+// The compiler adds the \0 for us with string literals
+char greeting_auto[20] = "Hello"; // [H][e][l][l][o][\0][...garbage...]
+
+// Includes the <string.h> library for useful functions:
+// strlen(str) - returns the length (excluding \0)
+// strcpy(dest, src) - copies src string into dest
+// strcat(dest, src) - appends src string onto dest
+// strcmp(str1, str2) - compares two strings</code></pre>
+
+                <h3>Simulation: Manual String Length</h3>
+                <p>This function simulates `strlen()` by manually finding the `\0`.</p>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// A function to calculate string length
+int my_strlen(char str[]) {
+    int length = 0;
+    // Keep counting until we find the null terminator
+    while (str[length] != '\0') {
+        length++;
+    }
+    return length;
+}
+
+int main() {
+    char message[] = "Computer Science";
+    int len = my_strlen(message);
+    printf("String: '%s'\n", message);
+    printf("Length: %d\n", len); // Output: 16
+    return 0;
+}</code></pre>
+
+                <h2>Two-Dimensional and Multidimensional Arrays</h2>
+                <p>While a 1D array is a list, a <strong>2D array</strong> is like a grid or a table, organized in rows and columns. It's an "array of arrays".</p>
+                <pre><code class="language-c">// Declaration: type name[ROWS][COLS];
+int matrix[3][4]; // A 3x4 grid (3 rows, 4 columns)
+
+// Initialization
+int data[2][3] = {
+    {1, 2, 3}, // Row 0
+    {4, 5, 6}  // Row 1
+};
+
+// Accessing
+int el = data[0][1]; // Accesses Row 0, Column 1. Value is 2.
+data[1][2] = 100; // Sets Row 1, Column 2 to 100.
+</code></pre>
+                
+                <p>In memory, a 2D array is still a <strong>contiguous block</strong>. It's stored in "row-major" order, meaning Row 0 is laid out first, followed immediately by Row 1, and so on.</p>
+                <p>A <strong>multidimensional array</strong> extends this. A 3D array (`int cube[3][4][5]`) can be seen as a "list of 2D arrays," like pages in a book.</p>
+
+                <h3>Input-Output of 2D Arrays</h3>
+                <p>You must use <strong>nested loops</strong> to process all elements in a 2D array. The outer loop iterates over the rows, and the inner loop iterates over the columns for each row.</p>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+#define ROWS 2
+#define COLS 3
+
+int main() {
+    int matrix[ROWS][COLS];
+
+    printf("Enter %d numbers for a %dx%d matrix:\n", ROWS*COLS, ROWS, COLS);
+    for (int i = 0; i < ROWS; i++) { // For each row
+        for (int j = 0; j < COLS; j++) { // For each column in that row
+            printf("Enter element [%d][%d]: ", i, j);
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+
+    printf("\nYour matrix:\n");
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            printf("%d\t", matrix[i][j]);
+        }
+        printf("\n"); // Newline after each row
+    }
+    return 0;
+}</code></pre>
+                
+                <h3>Passing 2D Arrays to Functions</h3>
+                <p>This is a common "gotcha" in C. When passing a 2D array, you <strong>must</strong> specify the size of all dimensions *except the first one*. This is so the compiler can still calculate memory offsets.</p>
+                <pre><code class="language-c">// WRONG: void printMatrix(int arr[][], int rows) { ... }
+// RIGHT:
+void printMatrix(int arr[][COLS], int rows) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < COLS; j++) {
+            printf("%d ", arr[i][j]);
+        }
+        printf("\n");
+    }
+}</code></pre>
+
+                <h2>Algorithms: Swapping and Min/Max</h2>
+                <p>Functions are perfect for implementing common algorithms.</p>
+                
+                <h3>Swapping a Sequence (or elements)</h3>
+                <p>To swap two values, you need a temporary variable. To make a reusable `swap` function, you must use <strong>pointers</strong> so the function can modify the original variables.</p>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// This function takes pointers to the variables
+void swap(int *a, int *b) {
+    int temp = *a; // De-reference 'a' to get its value
+    *a = *b;       // Set the value at address 'a'
+    *b = temp;     // Set the value at address 'b'
+}
+
+int main() {
+    int x = 10;
+    int y = 20;
+    printf("Before swap: x = %d, y = %d\n", x, y);
+    swap(&x, &y); // Pass the *addresses* of x and y
+    printf("After swap:  x = %d, y = %d\n", x, y);
+    return 0;
+}</code></pre>
+
+                <h3>Finding Min/Max in an Unsorted Sequence</h3>
+                <p>The strategy is to assume the first element is the min/max, then loop through the rest of the array. If you find a smaller/larger element, update your min/max.</p>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int findMax(int arr[], int size) {
+    // 1. Handle edge case of an empty array
+    if (size <= 0) {
+        return -1; // Or some error indicator
+    }
+
+    // 2. Assume the first element is the max
+    int max_val = arr[0];
+
+    // 3. Loop from the *second* element
+    for (int i = 1; i < size; i++) {
+        // 4. Compare and update if a larger value is found
+        if (arr[i] > max_val) {
+            max_val = arr[i];
+        }
+    }
+    
+    // 5. Return the result
+    return max_val;
+}
+
+int main() {
+    int scores[] = {15, 88, 2, 99, 45, 76};
+    int n = 6;
+    int max_score = findMax(scores, n);
+    printf("The highest score is: %d\n", max_score); // Output: 99
+    return 0;
+}</code></pre>
+            </article>
+        </section>
+
+        <!-- Page Content: Topic 2 -->
+        <section id="page-topic2" class="page-content hidden bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 md:p-10">
+            <article class="prose dark:prose-invert max-w-none">
+                <h1 class="text-3xl font-bold border-b border-gray-300 dark:border-gray-600 pb-2">Topic 2: Organizing Data: Easy Sorting and Structures</h1>
+                <p>With the basics of arrays and functions, we can now explore more powerful ways to organize and process data. <strong>Structs</strong> let us create custom data types, and <strong>sorting</strong> allows us to order that data meaningfully.</p>
+
+                <h2>Sorting Algorithms: From Simple to Efficient</h2>
+                <p>Sorting is the process of arranging elements in a specific order. While Bubble Sort is easy to understand, it's very slow. Let's explore several different methods, analyze their speed, and see why efficient sorting is one of the most important concepts in computer science.</p>
+
+                <h3 class="font-semibold text-lg">1. Bubble Sort (Simple, $O(n^2)$)</h3>
+                <p>As covered, Bubble Sort repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. Smaller (or larger) elements "bubble" up to their correct position.</p>
+                
+                <div class="simulation">
+                    <strong>Simulation (Array: [5, 1, 4, 2])</strong><br>
+                    <strong>Pass 1:</strong><br>
+                    [<strong>5, 1</strong>, 4, 2] -> Swap -> [1, <strong>5, 4</strong>, 2]<br>
+                    [1, <strong>5, 4</strong>, 2] -> Swap -> [1, 4, <strong>5, 2</strong>]<br>
+                    [1, 4, <strong>5, 2</strong>] -> Swap -> [1, 4, 2, <strong>5</strong>] (5 is sorted)<br>
+                    <strong>Pass 2:</strong><br>
+                    [<strong>1, 4</strong>, 2, 5] -> No Swap<br>
+                    [1, <strong>4, 2</strong>, 5] -> Swap -> [1, 2, <strong>4</strong>, 5] (4 is sorted)<br>
+                    <strong>Pass 3:</strong><br>
+                    [<strong>1, 2</strong>, 4, 5] -> No Swap (1 is sorted)<br>
+                    <strong>Final:</strong> [1, 2, 4, 5]
+                </div>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void bubbleSort(int arr[], int n) {
+    // Outer loop for number of passes
+    // After i-th pass, the last i elements are sorted
+    for (int i = 0; i < n - 1; i++) {
+        int swapped = 0; // Optimization
+        // Inner loop for comparisons
+        // We stop at n-1-i because the end is already sorted
+        for (int j = 0; j < n - 1 - i; j++) {
+            if (arr[j] > arr[j + 1]) { // Compare adjacent
+                swap(&arr[j], &arr[j + 1]);
+                swapped = 1;
+            }
+        }
+        // If no swaps in a pass, array is sorted
+        if (swapped == 0) {
+            break; 
+        }
+    }
+}
+
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int data[] = {64, 34, 25, 12, 22, 11, 90};
+    int n = 7;
+    
+    printf("Unsorted array: ");
+    printArray(data, n);
+    
+    bubbleSort(data, n);
+    
+    printf("Sorted array:   ");
+    printArray(data, n);
+    
+    return 0;
+}</code></pre>
+
+                <h3 class="font-semibold text-lg mt-6">2. Selection Sort (Simple, $O(n^2)$)</h3>
+                <p>Selection Sort works by dividing the array into two parts: a sorted part at the beginning and an unsorted part at the end. The algorithm repeatedly finds the <strong>smallest</strong> element from the unsorted part and swaps it with the first element of the unsorted part, thus growing the sorted part.</p>
+                
+                <div class="simulation">
+                    <strong>Simulation (Array: [64, 25, 12, 22])</strong><br>
+                    <strong>Pass 1:</strong> (Find smallest in [64, 25, 12, 22])<br>
+                    - Smallest is <strong>12</strong>. Swap with <strong>64</strong>.<br>
+                    - Result: [<strong>12</strong>, 25, 64, 22]<br>
+                    <strong>Pass 2:</strong> (Find smallest in [25, 64, 22])<br>
+                    - Smallest is <strong>22</strong>. Swap with <strong>25</strong>.<br>
+                    - Result: [12, <strong>22</strong>, 64, 25]<br>
+                    <strong>Pass 3:</strong> (Find smallest in [64, 25])<br>
+                    - Smallest is <strong>25</strong>. Swap with <strong>64</strong>.<br>
+                    - Result: [12, 22, <strong>25</strong>, 64]<br>
+                    <strong>Final:</strong> [12, 22, 25, 64]
+                </div>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// We already have swap() and printArray() from above
+
+void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        // Find the index of the minimum element in the unsorted part
+        int min_index = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_index]) {
+                min_index = j;
+            }
+        }
+        
+        // Swap the found minimum element with the first unsorted element
+        if (min_index != i) {
+            swap(&arr[i], &arr[min_index]);
+        }
+    }
+}
+
+int main_selection() {
+    int data[] = {64, 25, 12, 22, 11};
+    int n = 5;
+    printf("Unsorted: ");
+    printArray(data, n);
+    
+    selectionSort(data, n);
+    
+    printf("Sorted:   ");
+    printArray(data, n); // Output: 11 12 22 25 64
+    return 0;
+}</code></pre>
+
+                <h3 class="font-semibold text-lg mt-6">3. Insertion Sort (Simple, $O(n^2)$)</h3>
+                <p>Insertion Sort also builds the final sorted array one item at a time. It's much like sorting playing cards in your hand. It iterates through the array, and for each element, it "inserts" it into its correct position within the already-sorted part of the array to its left.</p>
+                
+                <div class="simulation">
+                    <strong>Simulation (Array: [12, 11, 13, 5])</strong><br>
+                    - Sorted part: [<strong>12</strong>]<br>
+                    <strong>Take 11:</strong> Shift 12 right. Insert 11.<br>
+                    - Sorted part: [<strong>11, 12</strong>]<br>
+                    <strong>Take 13:</strong> 13 > 12. No shift. Insert 13.<br>
+                    - Sorted part: [<strong>11, 12, 13</strong>]<br>
+                    <strong>Take 5:</strong> 5 < 13, 5 < 12, 5 < 11. Shift 13, 12, 11 right. Insert 5.<br>
+                    - Sorted part: [<strong>5, 11, 12, 13</strong>]<br>
+                    <strong>Final:</strong> [5, 11, 12, 13]
+                </div>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// We already have printArray() from above
+
+void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        // The element to be inserted
+        int key = arr[i];
+        int j = i - 1;
+        
+        // Move elements of arr[0..i-1] that are greater than
+        // the key, to one position ahead
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        // Insert the key at its correct position
+        arr[j + 1] = key;
+    }
+}
+
+int main_insertion() {
+    int data[] = {12, 11, 13, 5, 6};
+    int n = 5;
+    printf("Unsorted: ");
+    printArray(data, n);
+    
+    insertionSort(data, n);
+    
+    printf("Sorted:   ");
+    printArray(data, n); // Output: 5 6 11 12 13
+    return 0;
+}</code></pre>
+
+                <h3 class="font-semibold text-lg mt-6">4. Merge Sort (Efficient, $O(n \log n)$)</h3>
+                <p>Now we move to the fast algorithms. Merge Sort is a "Divide and Conquer" algorithm. It works by:</p>
+                <ol class="list-decimal list-inside">
+                    <li><strong>Divide:</strong> Recursively splitting the array in half until it has many tiny arrays of 1 element (which are, by definition, sorted).</li>
+                    <li><strong>Conquer:</strong> Merging the tiny sorted arrays back together in the correct order, creating larger sorted arrays.</li>
+                    <li><strong>Combine:</strong> Eventually, it merges the final two sorted halves into the fully sorted array.</li>
+                </ol>
+                <p>Its main cost is that it requires extra memory (a "temp" array) to do the merging.</p>
+                
+                <div class="simulation">
+                    <strong>Simulation (Array: [5, 2, 4, 1])</strong><br>
+                    <strong>Divide:</strong><br>
+                    - Split: [5, 2] and [4, 1]<br>
+                    - Split: [5], [2] and [4], [1]<br>
+                    <strong>Conquer (Merge):</strong><br>
+                    - Merge [5] and [2] -> [2, 5]<br>
+                    - Merge [4] and [1] -> [1, 4]<br>
+                    - Merge [2, 5] and [1, 4] -> [1, 2, 4, 5]<br>
+                    <strong>Final:</strong> [1, 2, 4, 5]
+                </div>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt; // For malloc/free
+
+// Merge two subarrays L and R into arr
+void merge(int arr[], int l, int m, int r) {
+    int i, j, k;
+    int n1 = m - l + 1;
+    int n2 = r - m;
+
+    // Create temp arrays
+    int L[n1], R[n2];
+
+    // Copy data to temp arrays L[] and R[]
+    for (i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[m + 1 + j];
+
+    // Merge the temp arrays back into arr[l..r]
+    i = 0; // Initial index of first subarray
+    j = 0; // Initial index of second subarray
+    k = l; // Initial index of merged subarray
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copy remaining elements of L[]
+    while (i < n1) { arr[k] = L[i]; i++; k++; }
+    // Copy remaining elements of R[]
+    while (j < n2) { arr[k] = R[j]; j++; k++; }
+}
+
+// Main mergeSort function
+void mergeSort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2; // Avoids overflow
+        // Sort first and second halves
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        // Merge the sorted halves
+        merge(arr, l, m, r);
+    }
+}
+
+int main_merge() {
+    int data[] = {12, 11, 13, 5, 6, 7};
+    int n = 6;
+    printf("Unsorted: ");
+    printArray(data, n);
+    
+    mergeSort(data, 0, n - 1); // Note the 0 and n-1
+    
+    printf("Sorted:   ");
+    printArray(data, n); // Output: 5 6 7 11 12 13
+    return 0;
+}</code></pre>
+
+                <h3 class="font-semibold text-lg mt-6">5. Quick Sort (Efficient, $O(n \log n)$ average)</h3>
+                <p>Quick Sort is another "Divide and Conquer" algorithm, but it works differently. It picks an element as a "pivot" and partitions the array around the pivot. All elements smaller than the pivot are moved to its left, and all elements larger are moved to its right. This is done recursively for the left and right sub-arrays.</p>
+                <p>Quick Sort is often faster than Merge Sort in practice, but its "worst-case" performance is $O(n^2)$ if the pivots are chosen poorly (e.g., always picking the smallest or largest element).</p>
+                
+                <div class="simulation">
+                    <strong>Simulation (Array: [7, 2, 1, 8, 6, 5], Pivot=5)</strong><br>
+                    <strong>Partition Pass:</strong> (i starts at -1)<br>
+                    - j=7 (7 < 5? No)<br>
+                    - j=2 (2 < 5? Yes) -> i=0. Swap arr[0] (7) with arr[1] (2) -> [<strong>2</strong>, <strong>7</strong>, 1, 8, 6, 5]<br>
+                    - j=1 (1 < 5? Yes) -> i=1. Swap arr[1] (7) with arr[2] (1) -> [2, <strong>1</strong>, <strong>7</strong>, 8, 6, 5]<br>
+                    - j=8 (8 < 5? No)<br>
+                    - j=6 (6 < 5? No)<br>
+                    <strong>Final Swap:</strong> Swap pivot (5) with arr[i+1] (7)<br>
+                    - Result: [2, 1, <strong>5</strong>, 8, 6, 7]<br>
+                    - Now recursively sort [2, 1] and [8, 6, 7]
+                </div>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// We need a swap function (defined above)
+
+// Partition function
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high]; // pivot
+    int i = (low - 1); // Index of smaller element
+
+    for (int j = low; j <= high - 1; j++) {
+        // If current element is smaller than the pivot
+        if (arr[j] < pivot) {
+            i++; // increment index of smaller element
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+// Main quickSort function
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        // pi is partitioning index
+        int pi = partition(arr, low, high);
+        
+        // Separately sort elements before partition
+        quickSort(arr, low, pi - 1);
+        // and after partition
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+int main_quick() {
+    int data[] = {10, 7, 8, 9, 1, 5};
+    int n = 6;
+    printf("Unsorted: ");
+    printArray(data, n);
+    
+    quickSort(data, 0, n - 1);
+    
+    printf("Sorted:   ");
+    printArray(data, n); // Output: 1 5 7 8 9 10
+    return 0;
+}</code></pre>
+
+                <h2 class="mt-8">Which Sort is Faster? A Graphical and Mathematical Comparison</h2>
+                <p>When we say "faster," we mean: how does the algorithm's runtime <strong>scale</strong> as the input size ($n$) gets larger? This is expressed using <strong>Big O notation</strong>.</p>
+                
+                <h3>Mathematical Comparison</h3>
+                <ul>
+                    <li><strong>$O(n^2)$ (Quadratic Time):</strong> Bubble, Selection, Insertion.</li>
+                    <li><strong>$O(n \log n)$ (Log-Linear Time):</strong> Merge Sort, Quick Sort (on average).</li>
+                </ul>
+                <p>What does this mean? If you double the input size $n$:</p>
+                <ul>
+                    <li>An $O(n^2)$ algorithm will take roughly $2^2 = 4$ times as long.</li>
+                    <li>An $O(n \log n)$ algorithm will take slightly more than $2$ times as long.</li>
+                </ul>
+                <p>If $n = 1,000,000$:</p>
+                <ul>
+                    <li>$n^2$ is $1,000,000,000,000$ (a trillion operations - will take minutes or hours)</li>
+                    <li>$n \log n$ is approx. $20,000,000$ (a few million operations - will take less than a second)</li>
+                </ul>
+                <p>This mathematical difference is the most important concept in algorithmic efficiency.</p>
+
+                <h3>Graphical Comparison</h3>
+                <p>Imagine plotting the number of items ($n$) on the x-axis and the time taken on the y-axis.
+                
+                </p>
+                <ul>
+                    <li>The $O(n^2)$ line would look like a steep, upward-curving parabola <strong>( 📈 )</strong>. It starts slow but becomes unusable very quickly.</li>
+                    <li>The $O(n \log n)$ line would look like an almost-straight line, rising very slowly <strong>( ↗️ )</strong>. It scales extremely well.</li>
+                </ul>
+
+                <h3>Algorithm "Cheat Sheet"</h3>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-200 dark:bg-gray-700">
+                            <th class="p-2 border border-gray-400 dark:border-gray-600">Algorithm</th>
+                            <th class="p-2 border border-gray-400 dark:border-gray-600">Best Case</th>
+                            <th class="p-2 border border-gray-400 dark:border-gray-600">Average Case</th>
+                            <th class="p-2 border border-gray-400 dark:border-gray-600">Worst Case</th>
+                            <th class="p-2 border border-gray-400 dark:border-gray-600">Space</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-300 dark:border-gray-700">
+                            <td class="p-2">Bubble Sort</td>
+                            <td class="p-2">$O(n)$ (w/ opt.)</td>
+                            <td class="p-2">$O(n^2)$</td>
+                            <td class="p-2">$O(n^2)$</td>
+                            <td class="p-2">$O(1)$</td>
+                        </tr>
+                        <tr class="border-b border-gray-300 dark:border-gray-700">
+                            <td class="p-2">Selection Sort</td>
+                            <td class="p-2">$O(n^2)$</td>
+                            <td class="p-2">$O(n^2)$</td>
+                            <td class="p-2">$O(n^2)$</td>
+                            <td class="p-2">$O(1)$</td>
+                        </tr>
+                        <tr class="border-b border-gray-300 dark:border-gray-700">
+                            <td class="p-2">Insertion Sort</td>
+                            <td class="p-2">$O(n)$</td>
+                            <td class="p-2">$O(n^2)$</td>
+                            <td class="p-2">$O(n^2)$</td>
+                            <td class="p-2">$O(1)$</td>
+                        </tr>
+                        <tr class="border-b border-gray-300 dark:border-gray-700">
+                            <td class="p-2">Merge Sort</td>
+                            <td class="p-2">$O(n \log n)$</td>
+                            <td class="p-2">$O(n \log n)$</td>
+                            <td class="p-2">$O(n \log n)$</td>
+                            <td class="p-2">$O(n)$</td>
+                        </tr>
+                        <tr class="border-b border-gray-300 dark:border-gray-700">
+                            <td class="p-2">Quick Sort</td>
+                            <td class="p-2">$O(n \log n)$</td>
+                            <td class="p-2">$O(n \log n)$</td>
+                            <td class="p-2">$O(n^2)$</td>
+                            <td class="p-2">$O(\log n)$</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="mt-2 text-sm">*Space: $O(1)$ is "in-place" (no extra memory). $O(n)$ or $O(\log n)$ is the extra memory needed.*</p>
+
+                <h2>Structs (Structures)</h2>
+                <p>A <code>struct</code> is a user-defined data type that groups together variables of potentially different types. Think of it as creating a custom "template" for your data.</p>
+                <p><strong>Real-World Example:</strong> Think of a contact card in your phone. A single "Contact" isn't just a name or a number; it's a *group* of data: a <code>name</code> (string), a <code>phone_number</code> (string or int), and an <code>email</code> (string). A <code>struct</code> lets you define this "Contact" template in your code.</p>
+                <pre><code class="language-c">// Define a new type called "struct Student"
+struct Student {
+    int studentID;
+    char name[100];
+    float gpa;
+};
+
+int main() {
+    // Create an instance (variable) of this type
+    struct Student s1;
+
+    // Access and modify members using the dot (.) operator
+    s1.studentID = 1001;
+    strcpy(s1.name, "Alice Smith"); // Use strcpy for strings!
+    s1.gpa = 3.8;
+
+    // We can also initialize at declaration
+    struct Student s2 = {1002, "Bob Johnson", 3.5};
+
+    printf("Student 1 Name: %s\n", s1.name);
+    printf("Student 2 ID:   %d\n", s2.studentID);
+
+    return 0;
+}</code></pre>
+
+                <h2>Arrays of Structs</h2>
+                <p>This is where structs become truly powerful. You can create an array where each element is a complex `struct`. This allows you to store and manage a list of records, like a database table.</p>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+struct Student {
+    int studentID;
+    char name[100];
+    float gpa;
+};
+
+int main() {
+    // Create an array that holds 3 Student structs
+    struct Student classroom[3];
+
+    // Populate the first student
+    classroom[0].studentID = 1001;
+    strcpy(classroom[0].name, "Alice");
+    classroom[0].gpa = 3.8;
+
+    // Populate the second student
+    classroom[1].studentID = 1002;
+    strcpy(classroom[1].name, "Bob");
+    classroom[1].gpa = 3.5;
+    
+    // Populate the third student
+    classroom[2].studentID = 1003;
+    strcpy(classroom[2].name, "Charlie");
+    classroom[2].gpa = 3.9;
+
+    // Loop through the array and print the data
+    printf("Class Roster:\n");
+    for (int i = 0; i < 3; i++) {
+        printf("  ID: %d, Name: %s, GPA: %.2f\n", 
+               classroom[i].studentID, 
+               classroom[i].name, 
+               classroom[i].gpa);
+    }
+
+    return 0;
+}</code></pre>
+
+                <h2>Sorting Arrays of Integers and Structures</h2>
+                <p>The logic for sorting an array of structs is the same as for integers. The only difference is the <strong>comparison</strong> step. Instead of comparing `arr[j] > arr[j+1]`, you compare the specific <em>member</em> of the struct you want to sort by (e.g., `arr[j].studentID > arr[j+1].studentID`).</p>
+                <p>The <strong>swap</strong> operation must swap the <em>entire struct</em>, not just the member.</p>
+
+                <h3>Simulation: Sorting an Array of Structs</h3>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+struct Student {
+    int studentID;
+    char name[100];
+    float gpa;
+};
+
+// A swap function that swaps two *entire* Student structs
+void swapStudents(struct Student *a, struct Student *b) {
+    struct Student temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Bubble sort adapted for an array of Student structs
+// Sorts by studentID
+void sortStudentsByID(struct Student arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - 1 - i; j++) {
+            // The only change is the comparison logic:
+            if (arr[j].studentID > arr[j + 1].studentID) {
+                swapStudents(&arr[j], &arr[j + 1]);
+            }
+        }
+    }
+}
+
+void printRoster(struct Student arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("  ID: %d, Name: %s, GPA: %.2f\n", 
+               arr[i].studentID, arr[i].name, arr[i].gpa);
+    }
+}
+
+int main() {
+    struct Student classroom[3] = {
+        {1003, "Charlie", 3.9},
+        {1001, "Alice", 3.8},
+        {1002, "Bob", 3.5}
+    };
+    int n = 3;
+
+    printf("Unsorted Roster:\n");
+    printRoster(classroom, n);
+
+    sortStudentsByID(classroom, n);
+
+    printf("\nSorted Roster (by ID):\n");
+    printRoster(classroom, n);
+
+    return 0;
+}</code></pre>
+
+                <h2>Reading, Storing, and Processing a Stream of Data</h2>
+                <p>You can combine loops, `scanf`, and arrays of structs to read a stream of data from the user until a certain condition is met (e.g., the array is full, or the user enters a sentinel value like -1).</p>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+struct Student {
+    int studentID;
+    float gpa;
+};
+#define MAX_STUDENTS 10
+
+int main() {
+    struct Student classroom[MAX_STUDENTS];
+    int student_count = 0;
+    float gpa_sum = 0;
+
+    printf("Enter student ID and GPA (e.g., 1001 3.8)\n");
+    printf("Enter -1 to stop.\n");
+
+    while (student_count < MAX_STUDENTS) {
+        printf("Student %d: ", student_count + 1);
+        
+        int id_in;
+        float gpa_in;
+
+        if (scanf("%d", &id_in) != 1) break; // Check input
+        
+        if (id_in == -1) {
+            break; // Stop loop
+        }
+        
+        if (scanf("%f", &gpa_in) != 1) break; // Check input
+
+        classroom[student_count].studentID = id_in;
+        classroom[student_count].gpa = gpa_in;
+        
+        gpa_sum += gpa_in;
+        student_count++;
+    }
+
+    printf("\n--- Data Entry Complete ---\n");
+    printf("Total students entered: %d\n", student_count);
+
+    if (student_count > 0) {
+        float average_gpa = gpa_sum / student_count;
+        printf("Average GPA: %.2f\n", average_gpa);
+    }
+
+    return 0;
+}</code></pre>
+
+                <h2>Several Sorting Arrays (Multi-Key Sorting)</h2>
+                <p>This is an advanced topic. What if you want to sort by GPA, but if two students have the same GPA, you want to sort them by name? This is called a <strong>multi-key sort</strong>. You simply add a secondary check inside your comparison `if` statement.</p>
+
+                <h3>Simulation: Multi-Key Sort (by GPA, then by Name)</h3>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+struct Student {
+    int studentID;
+    char name[100];
+    float gpa;
+};
+
+void swapStudents(struct Student *a, struct Student *b) {
+    struct Student temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Sorts by GPA (descending), then by Name (ascending)
+void multiKeySort(struct Student arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - 1 - i; j++) {
+            
+            // Primary Key: GPA (Descending)
+            if (arr[j].gpa < arr[j + 1].gpa) {
+                swapStudents(&arr[j], &arr[j + 1]);
+            } 
+            // Secondary Key: Name (Ascending)
+            // Check this *only if* the primary keys are equal
+            else if (arr[j].gpa == arr[j + 1].gpa) {
+                // strcmp returns > 0 if str1 is "greater" than str2
+                if (strcmp(arr[j].name, arr[j + 1].name) > 0) {
+                    swapStudents(&arr[j], &arr[j + 1]);
+                }
+            }
+        }
+    }
+}
+
+void printRoster(struct Student arr[], int n) {
+     for (int i = 0; i < n; i++) {
+        printf("  GPA: %.2f, Name: %s, ID: %d\n", 
+               arr[i].gpa, arr[i].name, arr[i].studentID);
+    }
+}
+
+int main() {
+    struct Student roster[4] = {
+        {1001, "Charlie", 3.8},
+        {1002, "Alice", 3.9},
+        {1003, "Bob", 3.8},
+        {1004, "David", 3.9}
+    };
+    int n = 4;
+
+    printf("Unsorted Roster:\n");
+    printRoster(roster, n);
+
+    multiKeySort(roster, n);
+
+    printf("\nSorted Roster (by GPA desc, then Name asc):\n");
+    printRoster(roster, n);
+
+    return 0;
+}</code></pre>
+            </article>
+        </section>
+
+        <!-- Page Content: Topic 3 -->
+        <section id="page-topic3" class="page-content hidden bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 md:p-10">
+            <article class="prose dark:prose-invert max-w-none">
+                <h1 class="text-3xl font-bold border-b border-gray-300 dark:border-gray-600 pb-2">Topic 3: Pointers and Advanced String Manipulation</h1>
+                <p>Pointers are arguably the most powerful and complex feature in C. They give you direct, raw access to memory. Understanding them is essential for dynamic memory, efficiency, and building complex data structures. We will also explore more advanced string manipulation using C's built-in library.</p>
+
+                <h2>Meaning of Pointer</h2>
+                <p>A <strong>pointer</strong> is a variable that does not hold a value (like 10 or 'A'), but instead holds a <strong>memory address</strong>. It "points to" the location where another variable is stored.</p>
+                <ul>
+                    <li>The <code>&</code> (Address-Of) operator: Gets the memory address of a variable.</li>
+                    <li>The <code>*</code> (Dereference) operator: Gets the <em>value</em> stored at the memory address a pointer is holding.</li>
+                </ul>
+                <p>A pointer's type (e.g., <code>int *</code>, <code>char *</code>) tells the compiler what kind of data it points to. This is crucial for pointer arithmetic.</p>
+                
+
+                <h3>Variable and Pointer</h3>
+                <p>This simulation shows the fundamental relationship between a variable, its address, a pointer, and the value it points to.</p>
+                <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int x = 10; // A normal variable
+    
+    // 1. Create a pointer 'p' that can point to an integer
+    int *p;
+    
+    // 2. Assign the memory address of 'x' to 'p'
+    p = &x;
+    
+    printf("Value of x:        %d\n", x);    // 10
+    printf("Address of x:      %p\n", &x);   // e.g., 0x7ffc1234
+    printf("Value of p (addr): %p\n", p);    // 0x7ffc1234 (same as &x)
+    printf("Value at p (*p):   %d\n", *p);   // 10 (value at the address)
+    
+    // 3. We can change 'x' by using the pointer
+    *p = 25; // "Go to the address p is holding, and set its value to 25"
+    
+    printf("\nAfter *p = 25:\n");
+    printf("Value of x:        %d\n", x);    // 25
+    
+    return 0;
+}</code></pre>
+
+                <h2>Array and Pointer</h2>
+                <p>This is a critical concept in C. An array's name is essentially a <strong>constant pointer</strong> to its first element. The `[]` (subscript) operator is just a convenient way to do pointer arithmetic.</p>
+                <ul>
+                    <li><code>arr</code> is the same as <code>&arr[0]</code>.</li>
+                    <li><code>arr[1]</code> is the same as <code>*(arr + 1)</code>.</li>
+                    <li><code>arr[2]</code> is the same as <code>*(arr + 2)</code>.</li>
+                </ul>
+                <p>When you add 1 to a pointer (<code>arr + 1</code>), it doesn't add 1 byte. It adds <code>1 * sizeof(type)</code>. This is why pointer types are so important.</p>
+                <div class="simulation">
+                    <strong>Iterating an array with a pointer:</strong><br>
+                    <pre><code class="language-c">int arr[3] = {10, 20, 30};
+int *p = arr; // p points to arr[0]
+
+printf("%d\n", *p);     // 10
+p++;                    // p now points to arr[1]
+printf("%d\n", *p);     // 20
+p++;                    // p now points to arr[2]
+printf("%d\n", *p);     // 30</code></pre>
+                </div>
+
+                <h2>Function and Pointer</h2>
+                <p>Pointers allow you to give functions access to the original variables, not just copies. This is known as "pass-by-reference" (simulated).</p>
+                
+                <h3>Modifying Original Variables</h3>
+                <p>The `swap` function from Topic 1 is the classic example. By passing pointers (addresses), the function can modify the original `x` and `y` in `main`.</p>
+                <pre><code class="language-c">// Function takes pointers
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int main() {
+    int x = 10, y = 20;
+    swap(&x, &y); // Pass the addresses
+    // x is now 20, y is now 10
+}</code></pre>
+
+                <h3>Passing Arrays (Revisited)</h3>
+                <p>When you pass an array to a function, you are *only* passing a pointer to its first element. This is why the function can modify the original array, and why it's so "cheap" (you don't copy the whole array).</p>
+                <pre><code class="language-c">// These two function prototypes are 100% equivalent
+void printArray(int arr[], int size);
+void printArray(int *arr, int size); // This is what C "sees"
+</code></pre>
+
+                <h2>Advanced Strings (<code>&lt;string.h&gt;</code>)</h2>
+                <p>We've covered strings as <code>char</code> arrays. Now let's look at the standard library functions that work on them. You must <code>#include &lt;string.h&gt;</code>.</p>
+                <p><strong>Note:</strong> The C++ <code>std::string</code> type (with <code>.insert()</code>, <code>.erase()</code>) does not exist in C. We must use <code>char*</code> and the functions below.</p>
+
+                <h3><code>char[]</code> vs <code>char*</code></h3>
+                <p>This is a very important distinction:</p>
+                <ul>
+                    <li><code>char str[] = "Hello";</code><br>Creates an array of 6 chars (H,e,l,l,o,\0) on the <strong>stack</strong>. This array is <strong>modifiable</strong>.</li>
+                    <li><code>char *str = "Hello";</code><br>Creates a <em>string literal</em> (often in read-only memory) and makes <code>str</code> a <strong>pointer</strong> to it. Trying to change it (e.g., <code>str[0] = 'J'</code>) is undefined behavior and often crashes.</li>
+                </ul>
+                <p><strong>Rule:</strong> If you plan to modify a string, always declare it as an array (<code>char str[]</code> or <code>char str[SIZE]</code>).</p>
+
+                <h3>Key String Functions</h3>
+                <ul>
+                    <li><strong>Size:</strong> <code>size_t strlen(char *str)</code><br>Returns the length of the string, <em>not</em> including the <code>\0</code>.</li>
+                    <li><strong>Copy:</strong> <code>char *strcpy(char *dest, char *src)</code><br>Copies the string from <code>src</code> into <code>dest</code>. <strong>DANGER:</strong> `dest` must be large enough! <code>strncpy</code> is a safer alternative that takes a size limit.</li>
+                    <li><strong>Concatenate (Append):</strong> <code>char *strcat(char *dest, char *src)</code><br>Appends the string from <code>src</code> onto the end of <code>dest</code>. <strong>DANGER:</strong> `dest` must be large enough for the combined string.</li>
+                    <li><strong>Compare:</strong> <code>int strcmp(char *str1, char *str2)</code><br>Returns <code>0</code> if strings are identical, <code>< 0</code> if `str1` comes before `str2`, <code>> 0</code> if `str1` comes after.</li>
+                    <li><strong>Find (Character):</strong> <code>char *strchr(char *str, int c)</code><br>Finds the <em>first</em> occurrence of a character <code>c</code>. Returns a pointer to that char, or <code>NULL</code> if not found.</li>
+                    <li><strong>Find (Substring):</strong> <code>char *strstr(char *haystack, char *needle)</code><br>Finds the <em>first</em> occurrence of the <code>needle</code> string inside the <code>haystack</code> string. Returns a pointer to the start of the substring, or <code>NULL</code> if not found.</li>
+                </ul>
+                
+                <div class="simulation">
+                    <strong>Simulation: Using <code>strstr</code> to find a substring</strong>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main() {
+    char haystack[] = "The quick brown fox";
+    char needle[] = "brown";
+    
+    char *result = strstr(haystack, needle);
+    
+    if (result != NULL) {
+        printf("Found at index: %ld\n", result - haystack);
+        printf("Substring: %s\n", result);
+    } else {
+        printf("Not found.\n");
+    }
+    // Output:
+    // Found at index: 10
+    // Substring: brown fox
+    return 0;
+}</code></pre>
+                </div>
+
+                <h3>Manual Insert & Erase</h3>
+                <p>C has no built-in "insert" or "erase" functions. You must do it manually by shifting memory using <code>memmove</code> (or a manual loop).</p>
+
+                <div class="simulation">
+                    <strong>Simulation: Manual "insert" into a string</strong>
+                    <pre><code class="language-c">// Inserts "XX" into "Hello" at index 2 -> "HeXXllo"
+char str[20] = "Hello";
+int pos = 2;
+char *insert = "XX";
+int insert_len = strlen(insert);
+int original_len = strlen(str);
+
+// 1. Move the part *after* the insertion point
+// Move "llo" (at str+2) to str+2+2
+memmove(str + pos + insert_len, // dest
+        str + pos,          // src
+        original_len - pos + 1); // +1 to include '\0'
+
+// 2. Copy the new string into the gap
+memcpy(str + pos, insert, insert_len);
+
+printf("%s\n", str); // Output: HeXXllo
+</code></pre>
+                </div>
+
+            </article>
+        </section>
+
+        <!-- Page Content: Problems -->
+        <section id="page-problems" class="page-content hidden">
+            <h1 class="text-3xl font-bold text-center mb-8">Practice Problems</h1>
+            
+            <div class="space-y-8">
+                <!-- Topic 1 Problems -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 md:p-8">
+                    <h2 class="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-6 border-b border-gray-300 dark:border-gray-600 pb-2">Topic 1: Arrays, Strings & Functions</h2>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Easy Problems</h3>
+                    <ol class="list-decimal list-inside space-y-2 mb-6">
+                        <li><strong>Sum of an Array:</strong> Write a function `int sumArray(int arr[], int size)` that takes an integer array and its size, and returns the sum of all its elements.</li>
+                        <li><strong>Reverse a String:</strong> Write a function `void reverseString(char str[])` that reverses a string in-place.</li>
+                        <li><strong>Find Element:</strong> Write a function `int findElement(int arr[], int size, int target)` that returns `1` (true) if `target` is in the array, and `0` (false) otherwise.</li>
+                    </ol>
+
+                    <h3 class="text-xl font-semibold mb-3">Medium Problems</h3>
+                    <ol class="list-decimal list-inside space-y-2 mb-6">
+                        <li><strong>Manual `strcpy`:</strong> Write your own version of `strcpy`. Your function `void my_strcpy(char dest[], char src[])` should copy the string from `src` to `dest`, including the null terminator.</li>
+                        <li><strong>Character Frequency:</strong> Write a function `int charFrequency(char str[], char c)` that counts how many times the character `c` appears in `str`.</li>
+                        <li><strong>Palindrome Check:</strong> Write a function `int isPalindrome(char str[])` that returns `1` if the string is a palindrome (reads the same forwards and backwards, e.g., "racecar") and `0` otherwise. Ignore case.</li>
+                        <li><strong>Array Average:</strong> Write a function that takes an integer array and its size, and returns the average of the elements as a `float`.</li>
+                    </ol>
+
+                    <h3 class="text-xl font-semibold mb-3">Hard Problems</h3>
+                    <ol class="list-decimal list-inside space-y-2 mb-6">
+                        <li><strong>Remove Whitespace:</strong> Write a function `void removeWhitespace(char str[])` that removes all spaces and tabs from a string in-place.</li>
+                        <li><strong>Second Largest Element:</strong> Write a function `int findSecondLargest(int arr[], int size)` that finds the second-largest unique element in an array. Handle edge cases like arrays with fewer than 2 elements.</li>
+                        <li><strong>Matrix Addition:</strong> Write a function `void addMatrices(int A[3][3], int B[3][3], int C[3][3])` that adds two 3x3 matrices (A and B) and stores the result in a third matrix (C).</li>
+                    </ol>
+                </div>
+
+                <!-- Topic 2 Problems -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 md:p-8">
+                    <h2 class="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-6 border-b border-gray-300 dark:border-gray-600 pb-2">Topic 2: Sorting & Structs</h2>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Easy Problems</h3>
+                    <ol class="list-decimal list-inside space-y-2 mb-6">
+                        <li><strong>Define `struct Book`:</strong> Define a `struct` named `Book` that contains a `char title[100]`, `char author[100]`, and `int year`. Create an instance of this struct, populate it, and print its details.</li>
+                        <li><strong>Implement Bubble Sort:</strong> Write a function `void sortInts(int arr[], int n)` that sorts an integer array using the Bubble Sort algorithm from scratch.</li>
+                        <li><strong>Find by ID:</strong> Write a function `struct Student findStudentByID(struct Student roster[], int n, int id)` that searches an array of `Student` structs and returns the struct of the student with the matching `id`. If not found, return a "null" or empty student.</li>
+                    </ol>
+
+                    <h3 class="text-xl font-semibold mb-3">Medium Problems</h3>
+                    <ol class="list-decimal list-inside space-y-2 mb-6">
+                        <li><strong>Read Book Array:</strong> Write a program that reads data for 5 `Book` structs from the user into an array, and then prints all 5 books.</li>
+                        <li><strong>Sort Books by Year:</strong> Write a function `void sortBooksByYear(struct Book library[], int n)` that sorts an array of `Book` structs by their `year` (ascending).</li>
+                        <li><strong>Implement Selection Sort:</strong> Write a function `void selectionSort(int arr[], int n)` that sorts an integer array using the Selection Sort algorithm.</li>
+                        <li><strong>Product Average:</strong> Define a `struct Product` with `char name[50]` and `float price`. Write a function that takes an array of `Product`s and returns the average price.</li>
+                    </ol>
+
+                    <h3 class="text-xl font-semibold mb-3">Hard Problems</h3>
+                    <ol class="list-decimal list-inside space-y-2 mb-6">
+                        <li><strong>Multi-Key Sort:</strong> (As seen in the tutorial) Write a function to sort an array of `Student` structs. The primary key is `grade` (descending), and the secondary key is `name` (ascending).</li>
+                        <li><strong>Implement Insertion Sort (for Structs):</strong> Write a function `void insertionSort(struct Product arr[], int n)` that sorts an array of `Product` structs by `price` (ascending) using the Insertion Sort algorithm.</li>
+                        <li><strong>Parse CSV String:</strong> Write a function `struct Student parseStudent(char csv_line[])` that takes a string like `"1001,Alice,95.5"` and parses it into a `struct Student` (with `id`, `name`, `grade`). You may need to use `strtok`.</li>
+                    </ol>
+                </div>
+
+                <!-- Topic 3 Problems -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 md:p-8">
+                    <h2 class="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-6 border-b border-gray-300 dark:border-gray-600 pb-2">Topic 3: Pointers & Advanced Strings</h2>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Easy Problems</h3>
+                    <ol class="list-decimal list-inside space-y-2 mb-6">
+                        <li><strong>Basic Pointers:</strong> Declare an integer `x = 100`. Create a pointer `p` that points to `x`. Print the value of `x`, the address of `x`, the value of `p`, and the value `*p`.</li>
+                        <li><strong>Pointer Function:</strong> Write a function `void addFive(int *num)` that takes a pointer to an integer, adds 5 to the value it points to, and returns void. Show it works in `main`.</li>
+                        <li><strong>String Concatenation:</strong> Create two strings, `char str1[50] = "Hello, ";` and `char str2[] = "World!";`. Use `strcat` to append `str2` to `str1` and print the result.</li>
+                    </ol>
+
+                    <h3 class="text-xl font-semibold mb-3">Medium Problems</h3>
+                    <ol class="list-decimal list-inside space-y-2 mb-6">
+                        <li><strong>Pointer Array Traversal:</strong> Write a function `int sumArray(int *arr, int size)` that computes the sum of an array using *only* pointer arithmetic (i.e., do not use the `arr[i]` syntax).</li>
+                        <li><strong>Find Substring:</strong> Write a function `int containsSubstring(char *haystack, char *needle)` that returns `1` (true) if the `needle` is found in the `haystack` using `strstr`, and `0` (false) otherwise.</li>
+                        <li><strong>Pass 2D Array:</strong> Write a function `int sumMatrix(int m[][3], int rows)` that takes a 2D array (with 3 columns) and finds the sum of all its elements.</li>
+                        <li><strong>Safe String Copy:</strong> Copy a string `char src[] = "A very long string"` into a `char dest[10]`. Use `strncpy` to safely copy only what fits, and manually ensure `dest` is null-terminated.</li>
+                    </ol>
+
+                    <h3 class="text-xl font-semibold mb-3">Hard Problems</h3>
+                    <ol class="list-decimal list-inside space-y-2 mb-6">
+                        <li><strong>Manual `strchr`:</strong> Write your own version of `strchr`. Your function `char* my_strchr(char *str, char c)` should return a pointer to the first occurrence of `c` in `str`, or `NULL`.</li>
+                        <li><strong>Manual `strErase`:</strong> Write a function `void strErase(char str[], int pos, int len)` that "erases" `len` characters from `str` starting at `pos`. (Hint: use `memmove`).</li>
+                        <li><strong>Array of Pointers:</strong> Create an array of `char*` pointers: `char *names[] = {"Alice", "Bob", "Charlie"};`. Write a loop that iterates through this array and prints each string. Explain why this is different from a 2D `char` array.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page Content: Solutions -->
+        <section id="page-solutions" class="page-content hidden">
+            <h1 class="text-3xl font-bold text-center mb-8">Problem Solutions</h1>
+
+            <div class="space-y-6">
+                
+                <!-- Topic 1 Solutions -->
+                <h2 class="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-4 border-b border-gray-300 dark:border-gray-600 pb-2">Topic 1 Solutions</h2>
+
+                <!-- T1 Easy 1 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Easy 1: Sum of an Array</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int sumArray(int arr[], int size) {
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += arr[i];
+    }
+    return sum;
+}
+
+int main() {
+    int myArr[] = {1, 2, 3, 4, 5};
+    int total = sumArray(myArr, 5);
+    printf("Sum: %d\n", total); // Output: 15
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> We initialize a `sum` variable to 0. We then loop through the array from index 0 to `size - 1`, adding each element's value to `sum`. Finally, we return the total `sum`.</p>
+                </div>
+                
+                <!-- T1 Easy 2 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Easy 2: Reverse a String</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+void reverseString(char str[]) {
+    int left = 0;
+    int right = strlen(str) - 1;
+    
+    while (left < right) {
+        // Swap the characters
+        char temp = str[left];
+        str[left] = str[right];
+        str[right] = temp;
+        
+        // Move pointers
+        left++;
+        right--;
+    }
+}
+
+int main() {
+    char myStr[] = "hello";
+    reverseString(myStr);
+    printf("Reversed: %s\n", myStr); // Output: olleh
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> We use a "two-pointer" technique. `left` starts at the beginning and `right` starts at the end. We swap the characters at `left` and `right`, then move `left` forward and `right` backward until they meet or cross.</p>
+                </div>
+
+                <!-- T1 Easy 3 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Easy 3: Find Element</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int findElement(int arr[], int size, int target) {
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == target) {
+            return 1; // Found it!
+        }
+    }
+    return 0; // Not found
+}
+
+int main() {
+    int myArr[] = {10, 20, 30, 40};
+    if (findElement(myArr, 4, 30)) {
+        printf("Found 30!\n");
+    }
+    if (!findElement(myArr, 4, 99)) {
+        printf("Did not find 99!\n");
+    }
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> This function uses a simple linear search. It loops through the array, and if it finds an element that matches `target`, it immediately returns `1` (true). If the loop finishes without finding the target, it returns `0` (false).</p>
+                </div>
+
+                <!-- T1 Medium 1 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Medium 1: Manual `strcpy`</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void my_strcpy(char dest[], char src[]) {
+    int i = 0;
+    // Loop until we find the null terminator in src
+    while (src[i] != '\0') {
+        dest[i] = src[i];
+        i++;
+    }
+    // CRITICAL: We must copy the null terminator too!
+    dest[i] = '\0';
+}
+
+int main() {
+    char source[] = "Copy this!";
+    char destination[20]; // Make sure it's big enough
+    
+    my_strcpy(destination, source);
+    
+    printf("Source: %s\n", source);
+    printf("Destination: %s\n", destination);
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> We copy characters one by one from `src` to `dest` using an index `i`. The loop stops when it hits the `\0` in the source string. The most important step is to manually copy the `\0` to the destination *after* the loop, to properly terminate the destination string.</p>
+                </div>
+
+                <!-- T1 Medium 2 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Medium 2: Character Frequency</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int charFrequency(char str[], char c) {
+    int count = 0;
+    int i = 0;
+    while (str[i] != '\0') {
+        if (str[i] == c) {
+            count++;
+        }
+        i++;
+    }
+    return count;
+}
+
+int main() {
+    char text[] = "hello world";
+    int count_l = charFrequency(text, 'l');
+    int count_x = charFrequency(text, 'x');
+    printf("Count of 'l': %d\n", count_l); // Output: 3
+    printf("Count of 'x': %d\n", count_x); // Output: 0
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> We initialize `count` to 0. We loop through the string `str` until the null terminator. In each iteration, we check if the current character `str[i]` is equal to the target character `c`. If it is, we increment `count`.</p>
+                </div>
+
+                <!-- T1 Medium 3 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Medium 3: Palindrome Check (Case-Insensitive)</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt; // For tolower()
+
+int isPalindrome(char str[]) {
+    int left = 0;
+    int right = strlen(str) - 1;
+    
+    while (left < right) {
+        // tolower() makes it case-insensitive
+        if (tolower(str[left]) != tolower(str[right])) {
+            return 0; // Not a palindrome
+        }
+        left++;
+        right--;
+    }
+    return 1; // Is a palindrome
+}
+
+int main() {
+    char str1[] = "Racecar";
+    char str2[] = "hello";
+    printf("'%s' is palindrome: %d\n", str1, isPalindrome(str1)); // 1
+    printf("'%s' is palindrome: %d\n", str2, isPalindrome(str2)); // 0
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> This uses the same two-pointer technique as the string reverse. We compare the characters at `left` and `right`. To make it case-insensitive, we use `tolower()` from `<ctype.h>` on both characters before comparing. If we find any mismatch, we return `0` immediately. If the loop completes, it means all characters matched, so we return `1`.</p>
+                </div>
+
+                <!-- T1 Medium 4 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Medium 4: Array Average</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+float arrayAverage(int arr[], int size) {
+    if (size <= 0) {
+        return 0.0; // Handle empty array
+    }
+    
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += arr[i];
+    }
+    
+    // We *must* cast one of the operands to float
+    // to force floating-point division.
+    return (float)sum / size;
+}
+
+int main() {
+    int grades[] = {90, 80, 81};
+    float avg = arrayAverage(grades, 3);
+    printf("Average: %.2f\n", avg); // Output: 83.67
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> First, we find the sum of the array, storing it in an `int` variable `sum`. The key part is the `return` statement. If we just did `sum / size`, C would perform integer division (e.g., `8 / 3 = 2`). By casting `(float)sum`, we tell the compiler to treat `sum` as a float *before* the division, which forces floating-point division and gives us a correct decimal answer.</p>
+                </div>
+                
+                <!-- T1 Hard 1 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Hard 1: Remove Whitespace (In-Place)</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+void removeWhitespace(char str[]) {
+    int read_index = 0;  // Index to read from
+    int write_index = 0; // Index to write to
+    
+    while (str[read_index] != '\0') {
+        // If the character is *not* whitespace
+        if (!isspace(str[read_index])) {
+            // Copy it to the write position
+            str[write_index] = str[read_index];
+            write_index++; // Advance write position
+        }
+        read_index++; // Always advance read position
+    }
+    
+    // Terminate the new, shorter string
+    str[write_index] = '\0';
+}
+
+int main() {
+    char myStr[] = "Hello,   World! How are you?";
+    removeWhitespace(myStr);
+    printf("%s\n", myStr); // Output: Hello,World!Howareyou?
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> This is a complex in-place algorithm. We use two "pointers" (indexes). `read_index` scans through the original string. `write_index` tracks where the next "good" (non-whitespace) character should go. We only copy a character from `read_index` to `write_index` if it's not a space. This effectively overwrites the spaces. Finally, we place a `\0` at `write_index` to end the new, shorter string.</p>
+                </div>
+
+                <!-- T1 Hard 2 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Hard 2: Second Largest Element</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt; // For INT_MIN
+
+int findSecondLargest(int arr[], int size) {
+    if (size < 2) {
+        return INT_MIN; // Not possible
+    }
+    
+    int largest = INT_MIN;
+    int second_largest = INT_MIN;
+    
+    for (int i = 0; i < size; i++) {
+        if (arr[i] > largest) {
+            // New largest found!
+            // The old largest becomes the new second_largest
+            second_largest = largest;
+            largest = arr[i];
+        } else if (arr[i] > second_largest && arr[i] != largest) {
+            // New second_largest found
+            second_largest = arr[i];
+        }
+    }
+    
+    return second_largest;
+}
+
+int main() {
+    int arr[] = {10, 5, 8, 20, 15, 20};
+    int sec = findSecondLargest(arr, 6);
+    printf("Second largest: %d\n", sec); // Output: 15
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> We initialize `largest` and `second_largest` to `INT_MIN` (the smallest possible integer). We loop through the array. If we find a new `largest`, we "shift" the old `largest` down to `second_largest` and update `largest`. If the new number isn't the largest, we check if it's bigger than `second_largest` *and* not equal to the current `largest` (to handle duplicates).</p>
+                </div>
+
+                <!-- T1 Hard 3 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Hard 3: Matrix Addition</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#define ROWS 3
+#define COLS 3
+
+void addMatrices(int A[ROWS][COLS], int B[ROWS][COLS], int C[ROWS][COLS]) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            C[i][j] = A[i][j] + B[i][j];
+        }
+    }
+}
+
+void printMatrix(int M[ROWS][COLS]) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            printf("%d\t", M[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int A[ROWS][COLS] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    int B[ROWS][COLS] = {{9, 8, 7}, {6, 5, 4}, {3, 2, 1}};
+    int C[ROWS][COLS]; // Result
+    
+    addMatrices(A, B, C);
+    
+    printf("Result Matrix C:\n");
+    printMatrix(C); // Output: all 10s
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> We use nested loops to iterate through every cell of the 2D arrays. The outer loop (`i`) iterates over the rows, and the inner loop (`j`) iterates over the columns. For each `(i, j)` coordinate, we add the elements from `A` and `B` and store the result in the same position in matrix `C`.</p>
+                </div>
+
+
+                <!-- Topic 2 Solutions -->
+                <h2 class="text-2xl font-semibold text-blue-600 dark:text-blue-400 mt-10 mb-4 border-b border-gray-300 dark:border-gray-600 pb-2">Topic 2 Solutions</h2>
+
+                <!-- T2 Easy 1 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Easy 1: Define `struct Book`</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+struct Book {
+    char title[100];
+    char author[100];
+    int year;
+};
+
+int main() {
+    // Create an instance
+    struct Book book1;
+    
+    // Populate it
+    strcpy(book1.title, "The C Programming Language");
+    strcpy(book1.author, "Kernighan & Ritchie");
+    book1.year = 1978;
+    
+    // Print it
+    printf("Title: %s\n", book1.title);
+    printf("Author: %s\n", book1.author);
+    printf("Year: %d\n", book1.year);
+    
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> We first define the `struct Book` template *outside* of `main`. Inside `main`, we declare a variable `book1` of type `struct Book`. We use `strcpy` to set the string fields (because we can't use `=` for arrays) and simple assignment (`=`) to set the integer `year`.</p>
+                </div>
+                
+                <!-- T2 Easy 2 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Easy 2: Implement Bubble Sort</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void sortInts(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - 1 - i; j++) {
+            // If element is greater than the next one
+            if (arr[j] > arr[j + 1]) {
+                swap(&arr[j], &arr[j + 1]);
+            }
+        }
+    }
+}
+
+int main() {
+    int data[] = {5, 1, 4, 2, 8};
+    int n = 5;
+    
+    sortInts(data, n);
+    
+    printf("Sorted: ");
+    for(int i=0; i < n; i++) {
+        printf("%d ", data[i]);
+    }
+    printf("\n"); // Output: 1 2 4 5 8
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> This is a from-scratch implementation of Bubble Sort. The outer loop (`i`) controls the number of passes. The inner loop (`j`) performs the comparisons. The `n - 1 - i` optimization in the inner loop stops it from checking elements that are already sorted at the end of the array.</p>
+                </div>
+                
+                <!-- T2 Easy 3 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Easy 3: Find by ID</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+struct Student {
+    int studentID;
+    char name[100];
+    float gpa;
+};
+
+// Returns the found student. If not found, returns an "empty" student.
+struct Student findStudentByID(struct Student roster[], int n, int id) {
+    for (int i = 0; i < n; i++) {
+        if (roster[i].studentID == id) {
+            return roster[i]; // Found! Return the whole struct
+        }
+    }
+    
+    // Not found. Return an empty/error struct.
+    struct Student notFound = {-1, "Not Found", 0.0};
+    return notFound;
+}
+
+int main() {
+    struct Student roster[2] = {
+        {101, "Alice", 3.8},
+        {102, "Bob", 3.5}
+    };
+    
+    struct Student s = findStudentByID(roster, 2, 102);
+    printf("Found: %s\n", s.name); // Output: Bob
+    
+    struct Student s_fail = findStudentByID(roster, 2, 999);
+    printf("Found: %s\n", s_fail.name); // Output: Not Found
+    
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> The function loops through the `roster` array. In each iteration, it checks if the `studentID` of the current struct `roster[i]` matches the `id` we're looking for. If it matches, we `return` the entire `roster[i]` struct. If the loop finishes, we create and return a special "Not Found" struct (often with an ID of -1).</p>
+                </div>
+
+                <!-- T2 Medium 1 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Medium 1: Read Book Array</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#define NUM_BOOKS 2 // Reduced from 5 for easier testing
+
+struct Book {
+    char title[100];
+    char author[100];
+    int year;
+};
+
+// Helper function to read a line safely (clears buffer)
+void readLine(char buffer[], int size) {
+    fgets(buffer, size, stdin);
+    // Remove newline character
+    buffer[strcspn(buffer, "\n")] = 0;
+}
+
+int main() {
+    struct Book library[NUM_BOOKS];
+    
+    for (int i = 0; i < NUM_BOOKS; i++) {
+        printf("--- Enter Book %d ---\n", i + 1);
+        printf("Title: ");
+        readLine(library[i].title, 100);
+        
+        printf("Author: ");
+        readLine(library[i].author, 100);
+        
+        printf("Year: ");
+        scanf("%d", &library[i].year);
+        
+        // Clean the input buffer after scanf
+        while(getchar() != '\n');
+    }
+    
+    printf("\n--- Library Contents ---\n");
+    for (int i = 0; i < NUM_BOOKS; i++) {
+        printf("Book %d: %s by %s (%d)\n", i+1,
+            library[i].title, library[i].author, library[i].year);
+    }
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> Reading strings with spaces (`fgets`) and numbers (`scanf`) together is tricky because `scanf` leaves a newline (`\n`) in the input buffer. This solution uses `fgets` (inside a `readLine` helper) for strings and `scanf` for the number. The `while(getchar() != '\n');` line is crucial to "clean" the buffer after `scanf` so the next `fgets` call works correctly.</p>
+                </div>
+
+                <!-- T2 Medium 2 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Medium 2: Sort Books by Year</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+struct Book {
+    char title[100];
+    char author[100];
+    int year;
+};
+
+void swapBooks(struct Book *a, struct Book *b) {
+    struct Book temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void sortBooksByYear(struct Book library[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - 1 - i; j++) {
+            // Compare the 'year' member
+            if (library[j].year > library[j + 1].year) {
+                swapBooks(&library[j], &library[j + 1]);
+            }
+        }
+    }
+}
+
+int main() {
+    struct Book library[3] = {
+        {"Book A", "Author A", 2005},
+        {"Book B", "Author B", 1998},
+        {"Book C", "Author C", 2010}
+    };
+    
+    sortBooksByYear(library, 3);
+    
+    printf("Books sorted by year:\n");
+    for (int i = 0; i < 3; i++) {
+        printf("%d: %s\n", library[i].year, library[i].title);
+    }
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> This is identical to the Bubble Sort for integers, but with two changes: 1) We have a `swapBooks` function that swaps the entire `struct Book`. 2) The comparison logic in the `if` statement checks `library[j].year > library[j+1].year`. The sort logic itself is unchanged.</p>
+                </div>
+
+                <!-- T2 Medium 3 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Medium 3: Implement Selection Sort</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        // Find the index of the minimum element in the unsorted part
+        int min_index = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_index]) {
+                min_index = j;
+            }
+        }
+        
+        // Swap the found minimum element with the first unsorted element
+        if (min_index != i) {
+            swap(&arr[i], &arr[min_index]);
+        }
+    }
+}
+
+int main() {
+    int data[] = {64, 25, 12, 22, 11};
+    int n = 5;
+    selectionSort(data, n);
+    printf("Sorted: ");
+    for(int i=0; i < n; i++) {
+        printf("%d ", data[i]);
+    }
+    printf("\n"); // Output: 11 12 22 25 64
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> Selection Sort works differently than Bubble Sort. For each pass (outer loop `i`), it finds the *smallest* element in the remaining unsorted part of the array (inner loop `j`). It then swaps that smallest element with the element at the current position `i`.</p>
+                </div>
+
+                <!-- T2 Medium 4 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Medium 4: Product Average</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+struct Product {
+    char name[50];
+    float price;
+};
+
+float getAveragePrice(struct Product items[], int n) {
+    if (n <= 0) {
+        return 0.0;
+    }
+    
+    float total_price = 0.0;
+    for (int i = 0; i < n; i++) {
+        total_price += items[i].price;
+    }
+    
+    return total_price / n;
+}
+
+int main() {
+    struct Product stock[3] = {
+        {"Apple", 0.5},
+        {"Banana", 0.3},
+        {"Orange", 0.4}
+    };
+    
+    float avg = getAveragePrice(stock, 3);
+    printf("Average price: $%.2f\n", avg); // Output: $0.40
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> This function is very similar to the `sumArray` function. We initialize `total_price` to 0.0. We loop through the `items` array and, for each `struct Product`, we add its `price` member to the `total_price`. Finally, we return the total divided by the number of items `n`.</p>
+                </div>
+
+                <!-- T2 Hard 1 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Hard 1: Multi-Key Sort</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+struct Student {
+    char name[100];
+    float grade;
+};
+
+void swapStudents(struct Student *a, struct Student *b) {
+    struct Student temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void sortRoster(struct Student roster[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - 1 - i; j++) {
+            
+            // Primary Key: Grade (Descending)
+            if (roster[j].grade < roster[j + 1].grade) {
+                swapStudents(&roster[j], &roster[j + 1]);
+            }
+            // Secondary Key: Name (Ascending)
+            else if (roster[j].grade == roster[j + 1].grade) {
+                if (strcmp(roster[j].name, roster[j + 1].name) > 0) {
+                    swapStudents(&roster[j], &roster[j + 1]);
+                }
+            }
+        }
+    }
+}
+
+int main() {
+    struct Student roster[4] = {
+        {"Charlie", 88.0}, {"Alice", 95.0}, {"Bob", 88.0}, {"David", 95.0}
+    };
+    sortRoster(roster, 4);
+    printf("Sorted roster:\n");
+    for(int i=0; i<4; i++) {
+        printf("%.1f - %s\n", roster[i].grade, roster[i].name);
+    }
+    /* Output:
+       95.0 - Alice
+       95.0 - David
+       88.0 - Bob
+       88.0 - Charlie
+    */
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> This is the solution from the tutorial. The `if` statement logic is nested. We first check the primary key (`grade`). Only if the primary keys are equal (`else if (roster[j].grade == ...)`), do we proceed to check the secondary key (`name`). We use `strcmp` for the string comparison.</p>
+                </div>
+
+                <!-- T2 Hard 2 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Hard 2: Insertion Sort (for Structs)</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+struct Product {
+    char name[50];
+    float price;
+};
+
+void insertionSort(struct Product arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        // The element to be inserted
+        struct Product key = arr[i];
+        int j = i - 1;
+        
+        // Move elements of arr[0..i-1] that are greater than
+        // key.price, to one position ahead
+        while (j >= 0 && arr[j].price > key.price) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        // Insert the key at its correct position
+        arr[j + 1] = key;
+    }
+}
+
+int main() {
+    struct Product stock[4] = {
+        {"Apple", 0.5}, {"Milk", 3.0}, {"Bread", 2.0}, {"Egg", 0.2}
+    };
+    
+    insertionSort(stock, 4);
+    
+    printf("Sorted by price:\n");
+    for (int i = 0; i < 4; i++) {
+        printf("$%.2f - %s\n", stock[i].price, stock[i].name);
+    }
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> Insertion Sort builds the final sorted array one item at a time. It iterates from `i = 1`, taking the element `arr[i]` (the `key`). It then "opens up a slot" for the `key` by shifting all elements in the sorted portion (`arr[0...i-1]`) that are greater than the `key.price` one position to the right. Finally, it inserts the `key` into its correct sorted position.</p>
+                </div>
+
+                <!-- T2 Hard 3 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Hard 3: Parse CSV String</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt; // For atoi, atof
+
+struct Student {
+    int id;
+    char name[100];
+    float grade;
+};
+
+struct Student parseStudent(char csv_line[]) {
+    struct Student s;
+    char *token;
+    
+    // Get the first token (ID)
+    token = strtok(csv_line, ",");
+    if (token != NULL) {
+        s.id = atoi(token); // Convert string to int
+    }
+    
+    // Get the second token (Name)
+    token = strtok(NULL, ",");
+    if (token != NULL) {
+        strcpy(s.name, token);
+    }
+    
+    // Get the third token (Grade)
+    token = strtok(NULL, ",");
+    if (token != NULL) {
+        s.grade = atof(token); // Convert string to float
+    }
+    
+    return s;
+}
+
+int main() {
+    // strtok modifies the string, so we must use a char array
+    char line[] = "1001,Alice Smith,95.5";
+    struct Student student1 = parseStudent(line);
+    
+    printf("Parsed Student:\n");
+    printf("ID: %d\n", student1.id);
+    printf("Name: %s\n", student1.name);
+    printf("Grade: %.1f\n", student1.grade);
+    
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> We use `strtok` from `<string.h>`. `strtok` "tokenizes" a string by splitting it based on a delimiter (in this case, a comma `,`). The first call to `strtok` takes the string. All subsequent calls use `NULL` to continue tokenizing the *same string*. We use `atoi` (ASCII to integer) and `atof` (ASCII to float) from `<stdlib.h>` to convert the string tokens into the correct data types.</p>
+                </div>
+
+            </div>
+
+            <!-- Topic 3 Solutions -->
+                <h2 class="text-2xl font-semibold text-blue-600 dark:text-blue-400 mt-10 mb-4 border-b border-gray-300 dark:border-gray-600 pb-2">Topic 3 Solutions</h2>
+
+                <!-- T3 Easy 1 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Easy 1: Basic Pointers</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int x = 100;
+    int *p = &x; // Create pointer and assign address of x
+    
+    printf("Value of x:     %d\n", x);
+    printf("Address of x:   %p\n", &x);
+    printf("Value of p:     %p\n", p);
+    printf("Value at *p:    %d\n", *p);
+    
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> This shows the core concept. `p` holds the address of `x`, so `&x` and `p` print the same address. `x` holds the value 100, and `*p` (dereferencing `p`) also gives the value 100.</p>
+                </div>
+
+                <!-- T3 Easy 2 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Easy 2: Pointer Function</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void addFive(int *num) {
+    // Add 5 to the value *at* the address 'num'
+    *num = *num + 5;
+}
+
+int main() {
+    int val = 10;
+    printf("Value before: %d\n", val);
+    
+    addFive(&val); // Pass the address of 'val'
+    
+    printf("Value after: %d\n", val); // Output: 15
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> We pass `&val` (the address of `val`) to the function. The function receives this address into the pointer `int *num`. It then uses `*num` to access the *original* `val` variable in `main` and modify it.</p>
+                </div>
+
+                <!-- T3 Easy 3 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Easy 3: String Concatenation</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main() {
+    char str1[50] = "Hello, ";
+    char str2[] = "World!";
+    
+    // Append str2 onto str1
+    strcat(str1, str2);
+    
+    printf("Result: %s\n", str1); // Output: Hello, World!
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> `strcat` finds the null terminator (`\0`) at the end of `str1`, and starts copying `str2` (including its `\0`) starting from that position, effectively overwriting `str1`'s terminator and merging the strings.</p>
+                </div>
+
+                <!-- T3 Medium 1 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Medium 1: Pointer Array Traversal</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// The 'arr' parameter is a pointer to the first element
+int sumArray(int *arr, int size) {
+    int sum = 0;
+    int *p_end = arr + size; // Pointer to one-past-the-end
+    
+    // Loop while 'arr' pointer is before the end pointer
+    for (int *p = arr; p < p_end; p++) {
+        sum += *p; // Add the value at the current pointer
+    }
+    return sum;
+}
+
+int main() {
+    int myArr[] = {10, 20, 30, 40};
+    int total = sumArray(myArr, 4);
+    printf("Sum: %d\n", total); // Output: 100
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> We get a pointer `arr` to the start. We create a pointer `p_end` to the address *after* the last element (`arr + size`). The `for` loop creates a new pointer `p` and increments `p` itself in each loop (e.g., from address 1000 to 1004 to 1008...). `*p` dereferences the pointer to get the value at each step.</p>
+                </div>
+
+                <!-- T3 Medium 2 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Medium 2: Find Substring</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int containsSubstring(char *haystack, char *needle) {
+    // strstr returns NULL if the needle is not found
+    if (strstr(haystack, needle) != NULL) {
+        return 1; // Found
+    } else {
+        return 0; // Not found
+    }
+}
+
+int main() {
+    char str[] = "The quick brown fox";
+    printf("Has 'brown': %d\n", containsSubstring(str, "brown")); // 1
+    printf("Has 'dog': %d\n", containsSubstring(str, "dog"));   // 0
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> This function is a simple wrapper around `strstr`. `strstr` does all the hard work of searching. We just check if its return value is `NULL` (not found) or non-`NULL` (found) and return 1 or 0 accordingly.</p>
+                </div>
+                
+                <!-- T3 Medium 3 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Medium 3: Pass 2D Array</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#define COLS 3
+
+// We must specify the size of all dimensions except the first
+int sumMatrix(int m[][COLS], int rows) {
+    int sum = 0;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < COLS; j++) {
+            sum += m[i][j];
+        }
+    }
+    return sum;
+}
+
+int main() {
+    int matrix[2][COLS] = { {1, 2, 3}, {4, 5, 6} };
+    int total = sumMatrix(matrix, 2);
+    printf("Matrix Sum: %d\n", total); // Output: 21
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> As shown in Topic 1, passing a 2D array requires a specific syntax. We must provide the column size (<code>int m[][COLS]</code> or <code>int m[][3]</code>) so the function can calculate <code>m[i][j]</code>. The nested loops then iterate and sum each element.</p>
+                </div>
+
+                <!-- T3 Medium 4 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Medium 4: Safe String Copy</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main() {
+    char src[] = "A very long string that won't fit";
+    char dest[10];
+    
+    // Copy at most (10 - 1) characters
+    strncpy(dest, src, 9);
+    
+    // strncpy may NOT null-terminate if src is too long
+    dest[9] = '\0'; // Manually add null terminator
+    
+    printf("Dest: %s\n", dest); // Output: A very lo
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> `strncpy` is safer than `strcpy` because it takes a size `n`. However, it has a major quirk: if the source string is longer than `n`, it will *not* append a `\0`. The correct, safe way to use it is to copy `n-1` characters, then manually set the *last* byte (<code>dest[n-1]</code>) to `\0`.</p>
+                </div>
+
+                <!-- T3 Hard 1 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Hard 1: Manual `strchr`</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+char* my_strchr(char *str, char c) {
+    // Loop until we hit the null terminator
+    while (*str != '\0') {
+        if (*str == c) {
+            // Found it! Return the pointer.
+            return str;
+        }
+        str++; // Move pointer to the next character
+    }
+    
+    // Special case: check if 'c' was the null terminator
+    if (c == '\0') {
+        return str; // Return pointer to the null terminator
+    }
+    
+    // Not found
+    return NULL;
+}
+
+int main() {
+    char text[] = "hello";
+    char *p = my_strchr(text, 'l');
+    if (p != NULL) {
+        printf("Found: %s\n", p); // Output: llo
+    }
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> The function takes a pointer `str` and a char `c`. It loops, checking the value *at* the pointer (`*str`). If `*str == c`, it returns the current pointer `str`. If not, it increments the pointer (`str++`) to move to the next byte. If the loop finishes, it means `c` wasn't found (unless `c` was `\0`), so it returns `NULL`.</p>
+                </div>
+                
+                <!-- T3 Hard 2 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Hard 2: Manual `strErase`</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+void strErase(char str[], int pos, int len) {
+    int str_len = strlen(str);
+    
+    // Basic validation
+    if (pos >= str_len) {
+        return; // Start position is out of bounds
+    }
+    
+    // Calculate start of source and destination
+    char *dest = str + pos;
+    char *src = str + pos + len;
+    
+    // Calculate bytes to move (including the null terminator)
+    int bytes_to_move = str_len - (pos + len) + 1;
+    if (bytes_to_move < 0) {
+        bytes_to_move = 1; // Just move the null terminator
+    }
+    
+    // memmove is safe for overlapping regions
+    memmove(dest, src, bytes_to_move);
+}
+
+int main() {
+    char myStr[] = "Hello, World!";
+    strErase(myStr, 7, 6); // Erase "World"
+    printf("%s\n", myStr); // Output: Hello, !
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> This is complex. We "erase" by "copying over". We want to copy the part of the string *after* the erase section (<code>str + pos + len</code>) on top of the beginning of the erase section (<code>str + pos</code>). We use `memmove` because the source and destination regions overlap. We must also be sure to copy the original string's `\0`.</p>
+                </div>
+
+                <!-- T3 Hard 3 -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 overflow-hidden">
+                    <h3 class="font-semibold text-lg mb-2">Hard 3: Array of Pointers</h3>
+                    <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    // This is an array of 3 *pointers*
+    // Each pointer points to a string literal
+    char *names[] = {
+        "Alice Smith",
+        "Bob Johnson",
+        "Charlie Lee"
+    };
+    
+    int n = sizeof(names) / sizeof(names[0]);
+    
+    printf("List of names:\n");
+    for (int i = 0; i < n; i++) {
+        printf("- %s\n", names[i]);
+    }
+    
+    return 0;
+}</code></pre>
+                    <p class="mt-4 prose dark:prose-invert"><strong>Explanation:</strong> This is *not* a 2D array. A 2D array (e.g., <code>char names[3][50]</code>) is a single, large, contiguous block of memory (3 * 50 = 150 bytes). This <code>char *names[]</code> is a small array of 3 *pointers* (e.g., 12 or 24 bytes). Each pointer *independently* points to a string literal, which can be of any length and located elsewhere in memory. This is often more memory-efficient for "jagged" data (strings of different lengths).</p>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JavaScript for Tab Navigation -->
+    <script>
+        // Array of all page content sections
+        const pages = document.querySelectorAll('.page-content');
+        // Array of all navigation buttons
+        const navButtons = document.querySelectorAll('.nav-btn');
+
+        function showPage(pageId, clickedButton) {
+            // Hide all pages
+            pages.forEach(page => {
+                if (!page.classList.contains('hidden')) {
+                    page.classList.add('hidden');
+                }
+            });
+
+            // Remove 'active' class from all buttons
+            navButtons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-800', 'dark:text-gray-200');
+
+            });
+
+            // Show the target page
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+
+            // Style the clicked button as active
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+                clickedButton.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-800', 'dark:text-gray-200');
+                clickedButton.classList.add('bg-blue-600', 'text-white');
+            }
+        }
+
+        // Set the initial page on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Show the first page by default
+            showPage('page-topic1', document.getElementById('btn-topic1'));
+        });
+    </script>
+
+</body>
+</html>
